@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Henri Audio &mdash; Writer's Room</title>
+<meta name="description" content="Writer's Room by Henri Audio &mdash; the songwriting app. Lyrics, voice memos, references, and your co-writers in one place. Your work stays yours." />
+<meta property="og:title" content="Writer's Room &mdash; by Henri Audio" />
+<meta property="og:description" content="Where songs actually get written. Lyrics, voice memos, and co-writers in one place." />
+<meta property="og:type" content="website" />
+<style>
+  :root {
+    --bg:#0C0B0E; --surface:#18161D; --border:#2C2933;
+    --gold:#D4B483; --gold-bright:#E4C690; --gold-muted:#7A6445;
+    --text:#EDE9E0; --dim:#B5AFA4; --faint:#8A857C;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    --serif:Georgia,"Times New Roman",serif;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family:var(--sans); -webkit-font-smoothing:antialiased; line-height:1.6; }
+  a { color:var(--gold); text-decoration:none; }
+  .wrap { max-width:960px; margin:0 auto; padding:0 24px; }
+
+  /* Nav */
+  nav { position:sticky; top:0; z-index:50; background:rgba(12,11,14,0.85); backdrop-filter:blur(10px); border-bottom:1px solid var(--border); }
+  .nav-inner { display:flex; align-items:center; justify-content:space-between; height:64px; }
+  .brand { display:flex; align-items:center; gap:10px; }
+  .brand img { width:30px; height:30px; border-radius:7px; display:block; }
+  .brand-name { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--faint); }
+  .tabs { display:flex; gap:6px; }
+  .tab { background:none; border:none; color:var(--dim); font-family:var(--sans); font-size:14px; cursor:pointer; padding:8px 12px; border-radius:8px; transition:color .15s, background .15s; }
+  .tab:hover { color:var(--text); }
+  .tab.active { color:var(--gold); }
+
+  .panel { display:none; }
+  .panel.active { display:block; animation:fade .35s ease; }
+  @keyframes fade { from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
+
+  /* Hero */
+  .hero { text-align:center; padding:72px 0 56px; }
+  .hero-logo { width:72px; height:72px; border-radius:17px; margin:0 auto 26px; display:block; box-shadow:0 8px 40px rgba(212,180,131,0.12); }
+  .eyebrow { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--faint); margin-bottom:18px; }
+  h1 { font-family:var(--serif); font-weight:400; font-size:54px; line-height:1.05; margin:0 0 18px; color:var(--text); }
+  .lede { font-family:var(--serif); font-size:23px; color:var(--gold-bright); margin:0 0 22px; }
+  .sub { font-size:17px; color:var(--dim); max-width:560px; margin:0 auto 14px; }
+  .trust { font-size:14px; color:var(--faint); max-width:520px; margin:0 auto 34px; }
+  .trust b { color:var(--dim); font-weight:600; }
+
+  /* Waitlist form */
+  form.beta { display:flex; gap:10px; max-width:440px; margin:0 auto; }
+  form.beta input { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:11px; color:var(--text); font-size:15px; padding:14px 16px; font-family:var(--sans); outline:none; }
+  form.beta input:focus { border-color:var(--gold-muted); }
+  form.beta button { background:var(--gold); color:#0C0B0E; border:none; border-radius:11px; font-size:15px; font-weight:700; padding:14px 22px; cursor:pointer; font-family:var(--sans); white-space:nowrap; transition:opacity .15s; }
+  form.beta button:hover { opacity:.9; }
+  form.beta button:disabled { opacity:.5; cursor:default; }
+  .form-msg { font-size:14px; margin-top:12px; min-height:18px; }
+  .form-msg.err { color:#E8918B; }
+  .form-msg.ok { color:var(--gold); }
+  .beta-success { max-width:440px; margin:0 auto; background:var(--surface); border:1px solid var(--gold-muted); border-radius:12px; padding:20px; font-size:15px; color:var(--text); }
+
+  /* Feature row */
+  .features { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:56px 0 8px; }
+  .feat { background:var(--surface); border:1px solid var(--border); border-radius:13px; padding:20px 16px; text-align:left; }
+  .feat .t { font-family:var(--serif); font-size:17px; color:var(--text); margin-bottom:6px; }
+  .feat .d { font-size:13px; color:var(--faint); line-height:1.5; }
+
+  /* About / Contact */
+  .section { padding:64px 0; max-width:680px; margin:0 auto; }
+  .section h2 { font-family:var(--serif); font-weight:400; font-size:36px; margin:0 0 8px; color:var(--text); }
+  .section .kicker { font-family:var(--serif); font-size:20px; color:var(--gold-bright); margin:0 0 22px; }
+  .section p { font-size:17px; color:var(--dim); margin:0 0 18px; }
+  .contact-btn { display:inline-block; background:var(--gold); color:#0C0B0E; font-weight:700; font-size:15px; padding:13px 24px; border-radius:11px; margin-top:6px; }
+
+  /* Footer */
+  footer { border-top:1px solid var(--border); margin-top:40px; }
+  .foot-inner { display:flex; align-items:center; justify-content:space-between; padding:22px 0; font-size:13px; color:var(--faint); flex-wrap:wrap; gap:10px; }
+  .foot-links a { color:var(--faint); margin-left:18px; }
+  .foot-links a:hover { color:var(--gold); }
+
+  @media (max-width:680px) {
+    h1 { font-size:38px; }
+    .lede { font-size:19px; }
+    .brand-name { display:none; }
+    .features { grid-template-columns:1fr 1fr; }
+    form.beta { flex-direction:column; }
+    .hero { padding:48px 0 40px; }
+    .nav-inner { height:58px; }
+    .tab { padding:8px 9px; font-size:13px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <div class="brand">
+      <img src="assets/icon.png" alt="Henri Audio" />
+      <span class="brand-name">Henri Audio</span>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-tab="room">Writer's Room</button>
+      <button class="tab" data-tab="about">About</button>
+      <button class="tab" data-tab="contact">Contact</button>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- Writer's Room -->
+  <section class="panel active" id="room">
+    <div class="hero">
+      <img class="hero-logo" src="assets/icon.png" alt="Writer's Room" />
+      <div class="eyebrow">The songwriting app</div>
+      <h1>Writer's Room</h1>
+      <p class="lede">Where songs actually get written.</p>
+      <p class="sub">Lyrics, voice memos, references, and your co-writers &mdash; finally in one place, built for the way a song really comes together. Write together in real time, catch every idea, and keep a take of every melody.</p>
+      <p class="trust"><b>Your work stays yours.</b> Never sold, never used to train AI.</p>
+
+      <form class="beta" id="beta-form" onsubmit="joinBeta(event)">
+        <input id="wl-email" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" aria-label="Email address" />
+        <button id="wl-btn" type="submit">Join the beta</button>
+      </form>
+      <div class="form-msg" id="form-msg"></div>
+    </div>
+
+    <div class="features">
+      <div class="feat"><div class="t">Write together</div><div class="d">Invite co-writers into a room and build the lyrics live, in real time.</div></div>
+      <div class="feat"><div class="t">Catch every idea</div><div class="d">A title, a line, a phrase &mdash; drop it in before it's gone.</div></div>
+      <div class="feat"><div class="t">Every take, marked</div><div class="d">Record melodies, mark the moments that matter, cue them on recording day.</div></div>
+      <div class="feat"><div class="t">Get unstuck</div><div class="d">Writing help that reads your lyrics to help you think &mdash; never writes your song.</div></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="panel" id="about">
+    <div class="section">
+      <h2>Henri Audio</h2>
+      <p class="kicker">Built by an actual songwriter.</p>
+      <p>Writer's Room is made by someone who lives in the writing room &mdash; built for the exact moment a song comes together, not bolted on after the fact. The lyrics in Notes, the voice memos scattered across phones, the bounce in Dropbox, the chord chart on paper: we put all of it in one place built for that moment.</p>
+      <p>We make tools that <b style="color:var(--dim);font-weight:600">serve</b> songwriters, never replace them. The writing help is there to get you unstuck &mdash; it never writes your song, and it never trains on your work. Your lyrics are yours, full stop.</p>
+      <p>Writer's Room is the first thing we've made. There's more coming.</p>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="panel" id="contact">
+    <div class="section">
+      <h2>Get in touch</h2>
+      <p class="kicker">We read everything.</p>
+      <p>Questions, press, partnerships, or just want to say hey &mdash; reach out and a real person will get back to you.</p>
+      <a class="contact-btn" href="mailto:team@henriaudio.com">team@henriaudio.com</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <div>&copy; 2026 Henri Audio</div>
+    <div class="foot-links">
+      <a href="/privacy">Privacy</a>
+      <a href="mailto:team@henriaudio.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // Tabs
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x => x.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }));
+
+  // Waitlist → Supabase (publishable key is safe in public code; RLS allows insert-only)
+  const db = supabase.createClient(
+    "https://httztneqksrdifvtmgsy.supabase.co",
+    "sb_publishable_RKq1XuvZCUH5kHWvLKbDNw_jGM5uJXu"
+  );
+  const msg = document.getElementById('form-msg');
+  function showMsg(text, isErr) { msg.textContent = text; msg.className = 'form-msg ' + (isErr ? 'err' : 'ok'); }
+
+  async function joinBeta(e) {
+    e.preventDefault();
+    const input = document.getElementById('wl-email');
+    const btn = document.getElementById('wl-btn');
+    const email = (input.value || '').trim().toLowerCase();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { showMsg('Enter a valid email address.', true); return; }
+    btn.disabled = true; btn.textContent = 'joining...'; showMsg('', false);
+    try {
+      const { error } = await db.from('waitlist').insert({ email: email, source: 'henriaudio.com' });
+      if (error && error.code !== '23505') throw error; // 23505 = already on the list, treat as success
+      document.getElementById('beta-form').outerHTML =
+        '<div class="beta-success">You’re on the list. We’ll email you the moment the beta opens.</div>';
+      msg.textContent = '';
+    } catch (err) {
+      showMsg('Something went wrong. Please try again.', true);
+      btn.disabled = false; btn.textContent = 'Join the beta';
+    }
+  }
+</script>
+
+</body>
+</html>
