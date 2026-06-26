@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Writer's Room &mdash; Early Access</title>
+<meta name="description" content="Get early access to Writer's Room by Henri Audio — the songwriting app that keeps your lyrics, voice memos, references, and co-writers in one place." />
+<meta property="og:title" content="Writer's Room — Early Access" />
+<meta property="og:description" content="The whole song, in one room. Join the early-access beta." />
+<meta property="og:type" content="website" />
+<style>
+  :root {
+    --bg:#0C0B0E; --surface:#18161D; --border:#2C2933;
+    --gold:#D4B483; --gold-bright:#E4C690; --gold-muted:#7A6445;
+    --text:#EDE9E0; --dim:#B5AFA4; --faint:#8A857C;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    --serif:Georgia,"Times New Roman",serif;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family:var(--sans); -webkit-font-smoothing:antialiased; line-height:1.6; }
+  a { color:var(--gold); text-decoration:none; }
+  .wrap { max-width:540px; margin:0 auto; padding:0 24px; }
+
+  nav { border-bottom:1px solid var(--border); }
+  .nav-inner { display:flex; align-items:center; justify-content:center; height:60px; }
+  .brand { display:flex; align-items:center; gap:11px; }
+  .ha-mark { width:11px; height:11px; background:var(--gold); transform:rotate(45deg); border-radius:2px; flex:none; }
+  .brand-name { font-size:13px; letter-spacing:3px; text-transform:uppercase; color:var(--text); }
+
+  .hero { text-align:center; padding:54px 0 44px; }
+  .hero-logo { width:80px; height:80px; border-radius:18px; margin:0 auto 26px; display:block; box-shadow:0 8px 40px rgba(212,180,131,0.14); }
+  .eyebrow { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:18px; }
+  h1 { font-family:var(--serif); font-weight:400; font-size:46px; line-height:1.05; margin:0 0 16px; color:var(--text); }
+  .lede { font-family:var(--serif); font-size:22px; color:var(--gold-bright); margin:0 0 20px; }
+  .sub { font-size:16px; color:var(--dim); margin:0 auto 16px; }
+  .trust { font-size:13.5px; color:var(--faint); margin:0 auto 30px; }
+  .trust b { color:var(--dim); font-weight:600; }
+
+  form.beta { display:flex; gap:10px; margin:0 auto; }
+  form.beta input { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:11px; color:var(--text); font-size:16px; padding:15px 16px; font-family:var(--sans); outline:none; }
+  form.beta input:focus { border-color:var(--gold-muted); }
+  form.beta button { background:var(--gold); color:#0C0B0E; border:none; border-radius:11px; font-size:15px; font-weight:700; padding:15px 22px; cursor:pointer; font-family:var(--sans); white-space:nowrap; transition:opacity .15s; }
+  form.beta button:hover { opacity:.9; }
+  form.beta button:disabled { opacity:.5; cursor:default; }
+  .form-msg { font-size:14px; margin-top:12px; min-height:18px; }
+  .form-msg.err { color:#E8918B; }
+  .form-msg.ok { color:var(--gold); }
+  .beta-success { background:var(--surface); border:1px solid var(--gold-muted); border-radius:12px; padding:22px; font-size:16px; color:var(--text); }
+
+  .feats { list-style:none; padding:0; margin:40px 0 0; text-align:left; display:grid; gap:12px; }
+  .feats li { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px 18px; }
+  .feats .t { font-family:var(--serif); font-size:16px; color:var(--text); margin-bottom:3px; }
+  .feats .d { font-size:13.5px; color:var(--faint); line-height:1.5; }
+
+  footer { border-top:1px solid var(--border); margin-top:44px; }
+  .foot-inner { display:flex; align-items:center; justify-content:center; gap:18px; padding:22px 0; font-size:13px; color:var(--faint); }
+  .foot-inner a { color:var(--faint); }
+  .foot-inner a:hover { color:var(--gold); }
+
+  @media (max-width:560px) {
+    h1 { font-size:38px; }
+    .lede { font-size:20px; }
+    form.beta { flex-direction:column; }
+    .hero { padding:40px 0 36px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href="https://henriaudio.com">
+      <span class="ha-mark" aria-hidden="true"></span>
+      <span class="brand-name">Henri Audio</span>
+    </a>
+  </div>
+</nav>
+
+<main class="wrap">
+  <div class="hero">
+    <img class="hero-logo" src="/assets/icon.png" alt="Writer's Room" />
+    <div class="eyebrow">Early Access</div>
+    <h1>Writer's Room</h1>
+    <p class="lede">The whole song, in one room.</p>
+    <p class="sub">Lyrics, voice memos, references, and your co-writers &mdash; together in one place, built for the way a song actually comes together. We're letting in a first group of songwriters now.</p>
+    <p class="trust"><b>Your work stays yours.</b> Never sold, never used to train AI.</p>
+
+    <form class="beta" id="beta-form" onsubmit="joinBeta(event)">
+      <input id="wl-email" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" aria-label="Email address" />
+      <button id="wl-btn" type="submit">Get early access</button>
+    </form>
+    <div class="form-msg" id="form-msg"></div>
+
+    <ul class="feats">
+      <li><div class="t">Write together, live</div><div class="d">Invite co-writers into a room and build the lyrics in real time.</div></li>
+      <li><div class="t">Every take, marked</div><div class="d">Record melodies, mark the moments that matter, cue them on recording day.</div></li>
+      <li><div class="t">On your phone and your computer</div><div class="d">Start a line on your phone, finish the verse on your laptop.</div></li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <a href="https://henriaudio.com">henriaudio.com</a>
+    <a href="/privacy">Privacy</a>
+    <a href="mailto:team@henriaudio.com">Contact</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // Waitlist → Supabase (publishable key is safe in public code; RLS allows insert-only).
+  const db = supabase.createClient(
+    "https://httztneqksrdifvtmgsy.supabase.co",
+    "sb_publishable_RKq1XuvZCUH5kHWvLKbDNw_jGM5uJXu"
+  );
+  // Source tag for attribution: ?ref=instagram (default) so David can see where signups came from.
+  const ref = (new URLSearchParams(location.search).get('ref') || 'instagram').slice(0, 40);
+  const msg = document.getElementById('form-msg');
+  function showMsg(text, isErr) { msg.textContent = text; msg.className = 'form-msg ' + (isErr ? 'err' : 'ok'); }
+
+  async function joinBeta(e) {
+    e.preventDefault();
+    const input = document.getElementById('wl-email');
+    const btn = document.getElementById('wl-btn');
+    const email = (input.value || '').trim().toLowerCase();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { showMsg('Enter a valid email address.', true); return; }
+    btn.disabled = true; btn.textContent = 'joining...'; showMsg('', false);
+    try {
+      const { error } = await db.from('waitlist').insert({ email: email, source: ref });
+      if (error && error.code !== '23505') throw error; // 23505 = already on the list, treat as success
+      document.getElementById('beta-form').outerHTML =
+        '<div class="beta-success">You’re on the list. We’ll email you the moment your spot opens up. 🎵</div>';
+      msg.textContent = '';
+    } catch (err) {
+      btn.disabled = false; btn.textContent = 'Get early access';
+      showMsg('Something went wrong — try again, or email team@henriaudio.com.', true);
+    }
+  }
+</script>
+</body>
+</html>
