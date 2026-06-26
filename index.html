@@ -24,9 +24,9 @@
   /* Nav */
   nav { position:sticky; top:0; z-index:50; background:rgba(12,11,14,0.85); backdrop-filter:blur(10px); border-bottom:1px solid var(--border); }
   .nav-inner { display:flex; align-items:center; justify-content:space-between; height:64px; }
-  .brand { display:flex; align-items:center; gap:10px; }
-  .brand img { width:30px; height:30px; border-radius:7px; display:block; }
-  .brand-name { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--faint); }
+  .brand { display:flex; align-items:center; gap:11px; cursor:pointer; }
+  .ha-mark { width:11px; height:11px; background:var(--gold); transform:rotate(45deg); border-radius:2px; flex:none; }
+  .brand-name { font-size:13px; letter-spacing:3px; text-transform:uppercase; color:var(--text); }
   .tabs { display:flex; gap:6px; }
   .tab { background:none; border:none; color:var(--dim); font-family:var(--sans); font-size:14px; cursor:pointer; padding:8px 12px; border-radius:8px; transition:color .15s, background .15s; }
   .tab:hover { color:var(--text); }
@@ -80,7 +80,6 @@
   @media (max-width:680px) {
     h1 { font-size:38px; }
     .lede { font-size:19px; }
-    .brand-name { display:none; }
     .features { grid-template-columns:1fr 1fr; }
     form.beta { flex-direction:column; }
     .hero { padding:48px 0 40px; }
@@ -93,8 +92,8 @@
 
 <nav>
   <div class="wrap nav-inner">
-    <div class="brand">
-      <img src="assets/icon.png" alt="Henri Audio" />
+    <div class="brand" onclick="showTab('room')">
+      <span class="ha-mark" aria-hidden="true"></span>
       <span class="brand-name">Henri Audio</span>
     </div>
     <div class="tabs">
@@ -111,10 +110,10 @@
   <section class="panel active" id="room">
     <div class="hero">
       <img class="hero-logo" src="assets/icon.png" alt="Writer's Room" />
-      <div class="eyebrow">The songwriting app</div>
+      <div class="eyebrow">A Henri Audio product</div>
       <h1>Writer's Room</h1>
-      <p class="lede">Where songs actually get written.</p>
-      <p class="sub">Lyrics, voice memos, references, and your co-writers &mdash; finally in one place, built for the way a song really comes together. Write together in real time, catch every idea, and keep a take of every melody.</p>
+      <p class="lede">The whole song, in one room.</p>
+      <p class="sub">A song scatters everywhere &mdash; lyrics in Notes, voice memos buried in your phone, the bounce in Dropbox, your co-writer in a group chat. Writer's Room pulls it all into one place, built for the way a song actually comes together.</p>
       <p class="trust"><b>Your work stays yours.</b> Never sold, never used to train AI.</p>
 
       <form class="beta" id="beta-form" onsubmit="joinBeta(event)">
@@ -136,10 +135,11 @@
   <section class="panel" id="about">
     <div class="section">
       <h2>Henri Audio</h2>
-      <p class="kicker">Built by an actual songwriter.</p>
-      <p>Writer's Room is made by someone who lives in the writing room &mdash; built for the exact moment a song comes together, not bolted on after the fact. The lyrics in Notes, the voice memos scattered across phones, the bounce in Dropbox, the chord chart on paper: we put all of it in one place built for that moment.</p>
-      <p>We make tools that <b style="color:var(--dim);font-weight:600">serve</b> songwriters, never replace them. The writing help is there to get you unstuck &mdash; it never writes your song, and it never trains on your work. Your lyrics are yours, full stop.</p>
-      <p>Writer's Room is the first thing we've made. There's more coming.</p>
+      <p class="kicker">The tools we always wished we had.</p>
+      <p>Henri Audio makes tools for musicians &mdash; designed by people who actually do the work, for the way it really happens. Built by an actual songwriter, not a software company guessing at it.</p>
+      <p>We started with the part we know best. <b style="color:var(--text);font-weight:600">Writer's Room</b>, our first product, is one home for the lyrics, voice memos, references, and co-writers a song usually scatters across a dozen apps.</p>
+      <p>Our north star is simple: tools that <b style="color:var(--dim);font-weight:600">serve</b> musicians, never replace them. Whatever we build, your work stays yours &mdash; never sold, never used to train AI.</p>
+      <p>This is just the beginning.</p>
     </div>
   </section>
 
@@ -170,13 +170,12 @@
   // Tabs
   const tabs = document.querySelectorAll('.tab');
   const panels = document.querySelectorAll('.panel');
-  tabs.forEach(t => t.addEventListener('click', () => {
-    tabs.forEach(x => x.classList.remove('active'));
-    panels.forEach(p => p.classList.remove('active'));
-    t.classList.add('active');
-    document.getElementById(t.dataset.tab).classList.add('active');
+  function showTab(name) {
+    tabs.forEach(x => x.classList.toggle('active', x.dataset.tab === name));
+    panels.forEach(p => p.classList.toggle('active', p.id === name));
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }));
+  }
+  tabs.forEach(t => t.addEventListener('click', () => showTab(t.dataset.tab)));
 
   // Waitlist → Supabase (publishable key is safe in public code; RLS allows insert-only)
   const db = supabase.createClient(
