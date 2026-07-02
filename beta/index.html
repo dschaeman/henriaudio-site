@@ -21,11 +21,11 @@
   a { color:var(--gold); text-decoration:none; }
   .wrap { max-width:540px; margin:0 auto; padding:0 24px; }
 
-  nav { border-bottom:1px solid var(--border); }
+  nav { }
   .nav-inner { display:flex; align-items:center; justify-content:center; height:60px; }
   .brand { display:flex; align-items:center; gap:11px; }
-  .ha-mark { width:11px; height:11px; background:var(--gold); transform:rotate(45deg); border-radius:2px; flex:none; }
-  .brand-name { font-size:13px; letter-spacing:3px; text-transform:uppercase; color:var(--text); }
+  .ha-mark { width:26px; height:26px; border-radius:8px; flex:none; display:block; }
+  .brand-name { font-size:13px; letter-spacing:3px; text-transform:uppercase; color:var(--text); font-weight:700; }
 
   .hero { text-align:center; padding:54px 0 44px; }
   .hero-logo { width:80px; height:80px; border-radius:18px; margin:0 auto 26px; display:block; box-shadow:0 8px 40px rgba(212,180,131,0.14); }
@@ -37,22 +37,22 @@
   .trust b { color:var(--dim); font-weight:600; }
 
   form.beta { display:flex; gap:10px; margin:0 auto; }
-  form.beta input { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:11px; color:var(--text); font-size:16px; padding:15px 16px; font-family:var(--sans); outline:none; }
-  form.beta input:focus { border-color:var(--gold-muted); }
-  form.beta button { background:var(--gold); color:#0C0B0E; border:none; border-radius:11px; font-size:15px; font-weight:700; padding:15px 22px; cursor:pointer; font-family:var(--sans); white-space:nowrap; transition:opacity .15s; }
+  form.beta input { flex:1; background:var(--surface); border:none; border-radius:13px; color:var(--text); font-size:16px; padding:16px 17px; font-family:var(--sans); outline:none; box-shadow:0 2px 10px rgba(0,0,0,0.3); }
+  form.beta input:focus { box-shadow:0 0 0 2px var(--gold-muted), 0 2px 10px rgba(0,0,0,0.3); }
+  form.beta button { background:var(--gold); color:#0C0B0E; border:none; border-radius:13px; font-size:15px; font-weight:800; padding:16px 24px; cursor:pointer; font-family:var(--sans); white-space:nowrap; transition:opacity .15s; box-shadow:0 4px 18px rgba(212,180,131,0.22); }
   form.beta button:hover { opacity:.9; }
   form.beta button:disabled { opacity:.5; cursor:default; }
   .form-msg { font-size:14px; margin-top:12px; min-height:18px; }
   .form-msg.err { color:#E8918B; }
   .form-msg.ok { color:var(--gold); }
-  .beta-success { background:var(--surface); border:1px solid var(--gold-muted); border-radius:12px; padding:22px; font-size:16px; color:var(--text); }
+  .beta-success { background:#2B241F; border:none; border-radius:15px; padding:22px; font-size:16px; color:var(--text); box-shadow:0 4px 18px rgba(0,0,0,0.3); }
 
   .feats { list-style:none; padding:0; margin:40px 0 0; text-align:left; display:grid; gap:12px; }
-  .feats li { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px 18px; }
-  .feats .t { font-family:var(--serif); font-size:16px; color:var(--text); margin-bottom:3px; }
+  .feats li { background:var(--surface); border:none; border-radius:15px; padding:18px 20px; box-shadow:0 3px 14px rgba(0,0,0,0.32); }
+  .feats .t { font-family:var(--serif); font-size:16px; font-weight:700; color:var(--text); margin-bottom:3px; }
   .feats .d { font-size:13.5px; color:var(--faint); line-height:1.5; }
 
-  footer { border-top:1px solid var(--border); margin-top:44px; }
+  footer { margin-top:48px; }
   .foot-inner { display:flex; align-items:center; justify-content:center; gap:18px; padding:22px 0; font-size:13px; color:var(--faint); }
   .foot-inner a { color:var(--faint); }
   .foot-inner a:hover { color:var(--gold); }
@@ -70,7 +70,7 @@
 <nav>
   <div class="wrap nav-inner">
     <a class="brand" href="https://henriaudio.com">
-      <span class="ha-mark" aria-hidden="true"></span>
+      <img class="ha-mark" src="/assets/icon.png" alt="" aria-hidden="true" />
       <span class="brand-name">Henri Audio</span>
     </a>
   </div>
