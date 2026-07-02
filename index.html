@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0C0B0E" />
 <title>Henri Audio &mdash; Writer's Room</title>
 <meta name="description" content="Writer's Room by Henri Audio &mdash; the songwriting app. Lyrics, voice memos, references, and your co-writers in one place. Your work stays yours." />
 <meta property="og:title" content="Writer's Room &mdash; by Henri Audio" />
@@ -16,87 +17,215 @@
 <meta name="twitter:title" content="Writer's Room &mdash; by Henri Audio" />
 <meta name="twitter:description" content="Where songs actually get written. Lyrics, voice memos, and co-writers in one place." />
 <meta name="twitter:image" content="https://henriaudio.com/assets/share-card.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg:#0C0B0E; --surface:#18161D; --border:#2C2933;
-    --gold:#D4B483; --gold-bright:#E4C690; --gold-muted:#7A6445;
-    --text:#EDE9E0; --dim:#B5AFA4; --faint:#8A857C;
+    --bg:#0C0B0E; --surface:#121116; --surface-hi:#18161D; --border:#1F1D26; --border-hover:#2E2A3A;
+    --gold:#B8986A; --gold-bright:#D4B483; --gold-muted:#7A6445; --gold-wash:#2B241F;
+    --text:#EDEAF4; --dim:#9B97A8; --muted:#4A4758; --faint:#8A857C;
+    --verse:#60A5FA; --chorus:#D4B483; --pre:#A78BFA; --red:#F4554E; --green:#4ADE80; --jess:#F472B6;
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
-    --serif:Georgia,"Times New Roman",serif;
+    --serif:"Cormorant",Georgia,"Times New Roman",serif;
+    --lyric:Georgia,"Times New Roman",serif;
   }
   * { box-sizing:border-box; }
-  html,body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family:var(--sans); -webkit-font-smoothing:antialiased; line-height:1.6; }
-  a { color:var(--gold); text-decoration:none; }
-  .wrap { max-width:960px; margin:0 auto; padding:0 24px; }
+  html,body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family:var(--sans); -webkit-font-smoothing:antialiased; line-height:1.6; overflow-x:hidden; }
+  a { color:var(--gold-bright); text-decoration:none; }
+  .wrap { max-width:1040px; margin:0 auto; padding:0 24px; }
+  svg.i { width:1em; height:1em; stroke:currentColor; stroke-width:2.2; fill:none; stroke-linecap:round; stroke-linejoin:round; display:inline-block; vertical-align:-0.12em; }
 
-  /* Nav — bold+simple: no hairline, filled active pill, the real W mark */
+  /* Nav */
   nav { position:sticky; top:0; z-index:50; background:rgba(12,11,14,0.88); backdrop-filter:blur(10px); }
   .nav-inner { display:flex; align-items:center; justify-content:space-between; height:64px; }
   .brand { display:flex; align-items:center; gap:11px; cursor:pointer; }
   .ha-mark { width:26px; height:26px; border-radius:8px; flex:none; display:block; }
   .brand-name { font-size:13px; letter-spacing:3px; text-transform:uppercase; color:var(--text); font-weight:700; }
-  .tabs { display:flex; gap:6px; background:var(--surface); padding:4px; border-radius:12px; }
+  .tabs { display:flex; gap:6px; background:var(--surface-hi); padding:4px; border-radius:12px; }
   .tab { background:none; border:none; color:var(--dim); font-family:var(--sans); font-size:14px; font-weight:600; cursor:pointer; padding:8px 14px; border-radius:9px; transition:color .15s, background .15s; }
   .tab:hover { color:var(--text); }
-  .tab.active { color:#0C0B0E; background:var(--gold); font-weight:700; }
+  .tab.active { color:#0C0B0E; background:var(--gold-bright); font-weight:700; }
 
   .panel { display:none; }
   .panel.active { display:block; animation:fade .35s ease; }
   @keyframes fade { from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
 
-  /* Hero */
-  .hero { text-align:center; padding:72px 0 56px; }
-  .hero-logo { width:78px; height:78px; border-radius:19px; margin:0 auto 26px; display:block; box-shadow:0 10px 48px rgba(212,180,131,0.16); }
-  .eyebrow { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--faint); margin-bottom:18px; }
-  h1 { font-family:var(--serif); font-weight:400; font-size:54px; line-height:1.05; margin:0 0 18px; color:var(--text); }
-  .lede { font-family:var(--serif); font-size:23px; color:var(--gold-bright); margin:0 0 22px; }
-  .sub { font-size:17px; color:var(--dim); max-width:560px; margin:0 auto 14px; }
-  .trust { font-size:14px; color:var(--faint); max-width:520px; margin:0 auto 34px; }
+  /* ── Hero ─────────────────────────────────────────────────────── */
+  .hero-grid { display:grid; grid-template-columns:1.02fr 0.98fr; gap:44px; align-items:center; padding:60px 0 40px; position:relative; }
+  .glow { position:absolute; right:-90px; top:50%; transform:translateY(-50%); width:640px; height:640px; border-radius:50%; pointer-events:none;
+    background:radial-gradient(circle, rgba(212,180,131,0.15) 0%, rgba(212,180,131,0.05) 42%, rgba(212,180,131,0) 68%);
+    animation:breathe 5.5s ease-in-out infinite; }
+  @keyframes breathe { 0%,100%{ opacity:.75; transform:translateY(-50%) scale(1);} 50%{ opacity:1; transform:translateY(-50%) scale(1.07);} }
+
+  .hero-copy { position:relative; z-index:2; }
+  .hero-logo { width:64px; height:64px; border-radius:16px; margin-bottom:24px; display:block; box-shadow:0 10px 48px rgba(212,180,131,0.18); }
+  .eyebrow { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--faint); margin-bottom:16px; }
+  h1 { font-family:var(--serif); font-weight:600; font-size:64px; line-height:1.0; margin:0 0 14px; color:var(--text); letter-spacing:-0.5px; }
+  .lede { font-family:var(--serif); font-style:italic; font-size:26px; color:var(--gold-bright); margin:0 0 20px; }
+  .sub { font-size:16.5px; color:var(--dim); max-width:480px; margin:0 0 12px; }
+  .trust { font-size:14px; color:var(--faint); max-width:460px; margin:0 0 28px; }
   .trust b { color:var(--dim); font-weight:600; }
 
-  /* Waitlist form */
-  form.beta { display:flex; gap:10px; max-width:440px; margin:0 auto; }
-  form.beta input { flex:1; background:var(--surface); border:none; border-radius:13px; color:var(--text); font-size:15px; padding:15px 17px; font-family:var(--sans); outline:none; box-shadow:0 2px 10px rgba(0,0,0,0.3); }
+  form.beta { display:flex; gap:10px; max-width:440px; }
+  form.beta input { flex:1; background:var(--surface-hi); border:none; border-radius:13px; color:var(--text); font-size:15px; padding:15px 17px; font-family:var(--sans); outline:none; box-shadow:0 2px 10px rgba(0,0,0,0.3); }
   form.beta input:focus { box-shadow:0 0 0 2px var(--gold-muted), 0 2px 10px rgba(0,0,0,0.3); }
-  form.beta button { background:var(--gold); color:#0C0B0E; border:none; border-radius:13px; font-size:15px; font-weight:800; padding:15px 24px; cursor:pointer; font-family:var(--sans); white-space:nowrap; transition:opacity .15s; box-shadow:0 4px 18px rgba(212,180,131,0.22); }
-  form.beta button:hover { opacity:.9; }
+  form.beta button { background:var(--gold-bright); color:#0C0B0E; border:none; border-radius:13px; font-size:15px; font-weight:800; padding:15px 24px; cursor:pointer; font-family:var(--sans); white-space:nowrap; transition:transform .15s, opacity .15s; box-shadow:0 4px 22px rgba(212,180,131,0.28); }
+  form.beta button:hover { opacity:.92; transform:translateY(-1px); }
   form.beta button:disabled { opacity:.5; cursor:default; }
   .form-msg { font-size:14px; margin-top:12px; min-height:18px; }
   .form-msg.err { color:#E8918B; }
-  .form-msg.ok { color:var(--gold); }
-  .beta-success { max-width:440px; margin:0 auto; background:#2B241F; border:none; border-radius:15px; padding:20px; font-size:15px; color:var(--text); box-shadow:0 4px 18px rgba(0,0,0,0.3); }
+  .form-msg.ok { color:var(--gold-bright); }
+  .beta-success { max-width:440px; background:var(--gold-wash); border:none; border-radius:15px; padding:20px; font-size:15px; color:var(--text); box-shadow:0 4px 18px rgba(0,0,0,0.3); }
 
-  /* Feature row */
-  .features { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:56px 0 8px; }
-  .feat { background:var(--surface); border:none; border-radius:16px; padding:22px 18px; text-align:left; box-shadow:0 3px 14px rgba(0,0,0,0.32); }
-  .feat .t { font-family:var(--serif); font-size:17px; font-weight:700; color:var(--text); margin-bottom:6px; }
+  /* ── The phone: the REAL writing room, writing itself ─────────── */
+  .phone-wrap { position:relative; z-index:2; display:flex; justify-content:center; }
+  .phone { width:352px; background:#111015; border-radius:40px; padding:13px; box-shadow:0 30px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.045), 0 0 90px rgba(212,180,131,0.07); }
+  .screen { background:var(--bg); border-radius:29px; padding:16px 12px 14px; display:flex; flex-direction:column; gap:11px; overflow:hidden; font-size:12px; }
+
+  /* header: back · title+sub · avatars · invite · search · menu */
+  .rh { display:flex; align-items:center; gap:7px; }
+  .tile { background:var(--surface-hi); border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--dim); flex:none; }
+  .rh .tile { width:30px; height:30px; font-size:13px; }
+  .rh-title { min-width:0; margin-right:2px; }
+  .rh-title b { display:block; font-size:14px; font-weight:800; letter-spacing:-0.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:82px; }
+  .rh-title small { display:block; font-size:9px; color:var(--muted); font-weight:500; white-space:nowrap; }
+  .rh-title .saved { color:var(--dim); opacity:0; transition:opacity .5s; }
+  .rh-title .saved.on { opacity:1; }
+  .avs { display:flex; flex:none; }
+  .av { width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:800; color:#0C0B0E; border:2px solid var(--bg); }
+  .av-me { background:var(--gold-bright); }
+  .av-j { background:var(--jess); margin-left:-7px; }
+  .invite { background:var(--gold-wash); color:var(--gold-bright); border-radius:10px; height:30px; padding:0 9px; display:flex; align-items:center; gap:4px; font-size:10.5px; font-weight:700; flex:none; }
+
+  /* segmented tabs: the room / my notes / voice */
+  .seg { display:flex; gap:5px; background:var(--surface-hi); border-radius:13px; padding:4px; }
+  .seg div { flex:1; display:flex; align-items:center; justify-content:center; gap:4px; padding:7px 0; border-radius:10px; font-size:10.5px; font-weight:600; color:var(--muted); }
+  .seg .on { background:var(--gold); color:#0C0B0E; font-weight:800; }
+
+  /* section pills */
+  .sp { display:flex; gap:6px; align-items:center; }
+  .sp .p { display:flex; align-items:center; gap:5px; border-radius:16px; padding:6px 11px; font-size:10.5px; font-weight:700; background:var(--surface-hi); color:var(--dim); white-space:nowrap; }
+  .sp .p i { width:6px; height:6px; border-radius:50%; flex:none; }
+  .sp .on { background:var(--verse); color:#0C0B0E; font-weight:800; }
+  .sp .on i { background:#0C0B0E; }
+
+  /* management strip */
+  .ms { display:flex; align-items:center; gap:6px; }
+  .ms .tile { width:28px; height:26px; font-size:11px; border-radius:8px; }
+  .ms .name { flex:1; text-align:center; font-size:11px; font-weight:800; color:var(--verse); display:flex; align-items:center; justify-content:center; gap:5px; }
+  .ms .name svg { opacity:.55; font-size:9px; }
+
+  /* shared label row */
+  .sl { display:flex; align-items:center; justify-content:space-between; }
+  .sl .l { font-size:8.5px; font-weight:800; letter-spacing:1.4px; color:var(--verse); display:flex; align-items:center; gap:5px; }
+  .sl .r { display:flex; align-items:center; gap:5px; }
+  .chip { font-size:8.5px; font-weight:800; border-radius:8px; padding:4px 7px; }
+  .chip-hist { background:var(--gold-wash); color:var(--gold-bright); }
+  .chip-syl { background:var(--gold-wash); color:var(--gold-bright); }
+  .wc { font-size:8.5px; color:var(--muted); font-weight:600; }
+
+  /* doc: spine + syllable gutter + serif lyrics */
+  .doc { display:flex; gap:7px; flex:1; min-height:150px; }
+  .spine { width:4px; border-radius:2px; background:var(--verse); flex:none; }
+  .doc-in { background:var(--surface-hi); border-radius:13px; padding:12px 12px 12px 8px; flex:1; position:relative; }
+  .dl { font-family:var(--lyric); font-size:14.5px; line-height:2.15; color:var(--text); padding-left:22px; position:relative; min-height:31px; }
+  .dl .syl { position:absolute; left:2px; top:8px; font-family:var(--sans); font-size:9.5px; color:var(--verse); opacity:0; transition:opacity .6s; font-weight:600; }
+  .dl .syl.on { opacity:.9; }
+  .cursor { display:inline-block; width:2px; height:1.05em; vertical-align:text-bottom; margin-left:1px; opacity:0; }
+  .cursor.on { opacity:1; animation:blink 0.9s step-end infinite; }
+  .c-me { background:var(--gold-bright); }
+  .c-j { background:var(--jess); }
+  @keyframes blink { 50% { opacity:0; } }
+  .typing { font-size:10px; color:var(--jess); font-weight:700; padding-left:22px; opacity:0; transition:opacity .4s; display:flex; align-items:center; gap:5px; margin-top:2px; }
+  .typing.on { opacity:1; }
+  .tdot { width:5px; height:5px; border-radius:50%; background:var(--jess); animation:tpulse 1s ease-in-out infinite; }
+  @keyframes tpulse { 0%,100%{ opacity:.4; transform:scale(1);} 50%{ opacity:1; transform:scale(1.25);} }
+
+  /* floating action buttons */
+  .fab { display:flex; gap:7px; }
+  .fab div { flex:1; display:flex; align-items:center; justify-content:center; gap:5px; border-radius:12px; padding:9px 0; font-size:10.5px; font-weight:700; }
+  .fab .f1 { background:var(--surface-hi); color:var(--dim); }
+  .fab .f2 { background:var(--gold-wash); color:var(--gold-bright); }
+  .fab .f3 { background:var(--gold); color:#0C0B0E; font-weight:800; }
+
+  /* record bar: idle ↔ recording */
+  .rec { background:var(--red); border-radius:15px; padding:11px 12px; color:#0C0B0E; font-weight:800; font-size:12px; display:flex; align-items:center; justify-content:center; gap:7px; animation:recbreathe 2.7s ease-in-out infinite; }
+  @keyframes recbreathe { 0%,100%{ transform:scale(1);} 50%{ transform:scale(1.018);} }
+  .rec.live { background:var(--surface-hi); color:var(--text); justify-content:flex-start; border:1.5px solid var(--red); animation:none; }
+  .rec .rdot { width:8px; height:8px; border-radius:50%; background:var(--red); animation:tpulse 1s ease-in-out infinite; display:none; }
+  .rec.live .rdot { display:block; }
+  .rec .rlab { display:flex; align-items:center; gap:7px; }
+  .rec.live .rlab { flex:1; font-size:11px; font-weight:700; color:var(--text); }
+  .rec.live .rlab .rt { color:var(--red); font-weight:800; }
+  .rec .mkchip { display:none; background:var(--gold-wash); color:var(--gold-bright); border-radius:8px; padding:3px 7px; font-size:9px; font-weight:800; transform:scale(.6); opacity:0; transition:opacity .3s, transform .35s cubic-bezier(.2,.9,.3,1.4); }
+  .rec.live .mkchip { display:block; }
+  .rec .mkchip.pop { opacity:1; transform:scale(1); }
+  .rec .stopq { display:none; width:24px; height:24px; border-radius:9px; background:var(--red); align-items:center; justify-content:center; flex:none; }
+  .rec.live .stopq { display:flex; }
+  .rec .stopq i { width:9px; height:9px; border-radius:2px; background:#0C0B0E; display:block; }
+
+  /* ── Features ─────────────────────────────────────────────────── */
+  .features { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:64px 0 8px; }
+  .feat { background:var(--surface-hi); border:none; border-radius:16px; padding:22px 18px; text-align:left; box-shadow:0 3px 14px rgba(0,0,0,0.32);
+    opacity:0; transform:translateY(22px); transition:opacity .6s ease, transform .6s cubic-bezier(.2,.8,.3,1), box-shadow .25s; }
+  .feat.in { opacity:1; transform:none; }
+  .feat:hover { transform:translateY(-4px); box-shadow:0 10px 26px rgba(0,0,0,0.42); }
+  .feat .ic { width:34px; height:34px; border-radius:10px; background:var(--gold-wash); color:var(--gold-bright); display:flex; align-items:center; justify-content:center; margin-bottom:12px; font-size:15px; }
+  .feat .t { font-family:var(--serif); font-weight:600; font-size:19px; color:var(--text); margin-bottom:6px; }
   .feat .d { font-size:13px; color:var(--faint); line-height:1.5; }
 
   /* About / Contact */
   .section { padding:64px 0; max-width:680px; margin:0 auto; }
-  .section h2 { font-family:var(--serif); font-weight:400; font-size:36px; margin:0 0 8px; color:var(--text); }
-  .section .kicker { font-family:var(--serif); font-size:20px; color:var(--gold-bright); margin:0 0 22px; }
+  .section h2 { font-family:var(--serif); font-weight:600; font-size:42px; margin:0 0 8px; color:var(--text); }
+  .section .kicker { font-family:var(--serif); font-style:italic; font-size:22px; color:var(--gold-bright); margin:0 0 22px; }
   .section p { font-size:17px; color:var(--dim); margin:0 0 18px; }
-  .contact-btn { display:inline-block; background:var(--gold); color:#0C0B0E; font-weight:800; font-size:15px; padding:14px 26px; border-radius:13px; margin-top:6px; box-shadow:0 4px 18px rgba(212,180,131,0.22); }
+  .contact-btn { display:inline-block; background:var(--gold-bright); color:#0C0B0E; font-weight:800; font-size:15px; padding:14px 26px; border-radius:13px; margin-top:6px; box-shadow:0 4px 18px rgba(212,180,131,0.22); }
 
-  /* Footer */
   footer { margin-top:48px; }
   .foot-inner { display:flex; align-items:center; justify-content:space-between; padding:22px 0; font-size:13px; color:var(--faint); flex-wrap:wrap; gap:10px; }
   .foot-links a { color:var(--faint); margin-left:18px; }
-  .foot-links a:hover { color:var(--gold); }
+  .foot-links a:hover { color:var(--gold-bright); }
 
-  @media (max-width:680px) {
-    h1 { font-size:38px; }
-    .lede { font-size:19px; }
+  @media (max-width:880px) {
+    .hero-grid { grid-template-columns:1fr; gap:40px; padding:44px 0 32px; text-align:center; }
+    .hero-copy { display:flex; flex-direction:column; align-items:center; }
+    .glow { right:auto; left:50%; transform:translate(-50%,-30%); width:480px; height:480px; }
+    @keyframes breathe { 0%,100%{ opacity:.75; transform:translate(-50%,-30%) scale(1);} 50%{ opacity:1; transform:translate(-50%,-30%) scale(1.07);} }
+    h1 { font-size:46px; }
+    .lede { font-size:22px; }
     .features { grid-template-columns:1fr 1fr; }
-    form.beta { flex-direction:column; }
-    .hero { padding:48px 0 40px; }
-    .nav-inner { height:58px; }
-    .tab { padding:8px 9px; font-size:13px; }
+    form.beta { flex-direction:column; width:100%; }
+    .phone { width:min(340px, 90vw); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .glow, .rec, .tdot, .cursor.on, .rec .rdot { animation:none !important; }
+    .feat { transition:none; }
   }
 </style>
 </head>
 <body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+    <symbol id="i-fwd" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+    <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/></symbol>
+    <symbol id="i-addp" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="0.5"/><circle cx="4" cy="12" r="0.5"/><circle cx="4" cy="18" r="0.5"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.2c.7.6 1.2 1.4 1.4 2.3h5.2c.2-.9.7-1.7 1.4-2.3A6 6 0 0 0 12 3z"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.7 1.8 1.8.7-1.8.7L19 20l-.7-1.8-1.8-.7 1.8-.7z"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+  </defs>
+</svg>
 
 <nav>
   <div class="wrap nav-inner">
@@ -116,26 +245,100 @@
 
   <!-- Writer's Room -->
   <section class="panel active" id="room">
-    <div class="hero">
-      <img class="hero-logo" src="assets/icon.png" alt="Writer's Room" />
-      <div class="eyebrow">A Henri Audio product</div>
-      <h1>Writer's Room</h1>
-      <p class="lede">The whole song, in one room.</p>
-      <p class="sub">A song scatters everywhere &mdash; lyrics in Notes, voice memos buried in your phone, the bounce in Dropbox, your co-writer in a group chat. Writer's Room pulls it all into one place, built for the way a song actually comes together.</p>
-      <p class="trust"><b>Your work stays yours.</b> Never sold, never used to train AI.</p>
+    <div class="hero-grid">
+      <div class="glow" aria-hidden="true"></div>
 
-      <form class="beta" id="beta-form" onsubmit="joinBeta(event)">
-        <input id="wl-email" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" aria-label="Email address" />
-        <button id="wl-btn" type="submit">Join the beta</button>
-      </form>
-      <div class="form-msg" id="form-msg"></div>
+      <div class="hero-copy">
+        <img class="hero-logo" src="assets/icon.png" alt="Writer's Room" />
+        <div class="eyebrow">A Henri Audio product</div>
+        <h1>Writer's Room</h1>
+        <p class="lede">The whole song, in one room.</p>
+        <p class="sub">A song scatters everywhere &mdash; lyrics in Notes, voice memos buried in your phone, the bounce in Dropbox, your co-writer in a group chat. Writer's Room pulls it all into one place, built for the way a song actually comes together.</p>
+        <p class="trust"><b>Your work stays yours.</b> Never sold, never used to train AI.</p>
+
+        <form class="beta" id="beta-form" onsubmit="joinBeta(event)">
+          <input id="wl-email" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" aria-label="Email address" />
+          <button id="wl-btn" type="submit">Join the beta</button>
+        </form>
+        <div class="form-msg" id="form-msg"></div>
+      </div>
+
+      <!-- The live demo: the real writing room, writing itself -->
+      <div class="phone-wrap" aria-hidden="true">
+        <div class="phone">
+          <div class="screen">
+
+            <div class="rh">
+              <div class="tile"><svg class="i"><use href="#i-back"/></svg></div>
+              <div class="rh-title"><b>Golden Hour</b><small>you, Jess <span class="saved" id="saved">&middot; saved &check;</span></small></div>
+              <div class="avs"><span class="av av-me">ME</span><span class="av av-j">JE</span></div>
+              <div class="invite"><svg class="i"><use href="#i-addp"/></svg>invite</div>
+              <div class="tile"><svg class="i"><use href="#i-search"/></svg></div>
+              <div class="tile"><svg class="i"><use href="#i-more"/></svg></div>
+            </div>
+
+            <div class="seg">
+              <div class="on"><svg class="i"><use href="#i-book"/></svg>the room</div>
+              <div><svg class="i"><use href="#i-pencil"/></svg>my notes</div>
+              <div><svg class="i"><use href="#i-mic"/></svg>voice</div>
+            </div>
+
+            <div class="sp">
+              <div class="p on"><i></i>Verse 1</div>
+              <div class="p"><i style="background:var(--pre)"></i>Pre-Chorus</div>
+              <div class="p"><i style="background:var(--chorus)"></i>Chorus</div>
+              <div class="p"><svg class="i" style="font-size:10px"><use href="#i-plus"/></svg> add</div>
+            </div>
+
+            <div class="ms">
+              <div class="tile"><svg class="i"><use href="#i-back"/></svg></div>
+              <div class="name">Verse 1 <svg class="i"><use href="#i-pencil"/></svg></div>
+              <div class="tile"><svg class="i"><use href="#i-fwd"/></svg></div>
+              <div class="tile"><svg class="i"><use href="#i-copy"/></svg></div>
+              <div class="tile"><svg class="i"><use href="#i-trash"/></svg></div>
+            </div>
+
+            <div class="sl">
+              <div class="l"><svg class="i"><use href="#i-users"/></svg>SHARED &middot; VERSE 1</div>
+              <div class="r">
+                <span class="chip chip-hist"><svg class="i"><use href="#i-clock"/></svg> history 3</span>
+                <span class="chip chip-syl">syl</span>
+                <span class="wc" id="wc">0w</span>
+              </div>
+            </div>
+
+            <div class="doc">
+              <div class="spine"></div>
+              <div class="doc-in">
+                <div class="dl"><span class="syl" id="syl1">8</span><span id="line1"></span><span class="cursor c-me" id="cur1"></span></div>
+                <div class="dl"><span class="syl" id="syl2">10</span><span id="line2"></span><span class="cursor c-j" id="cur2"></span></div>
+                <div class="typing" id="typing"><span class="tdot"></span>Jess is typing&hellip;</div>
+              </div>
+            </div>
+
+            <div class="fab">
+              <div class="f1"><svg class="i"><use href="#i-list"/></svg>full song</div>
+              <div class="f2"><svg class="i"><use href="#i-bulb"/></svg>concepts</div>
+              <div class="f3"><svg class="i"><use href="#i-spark"/></svg>stuck?</div>
+            </div>
+
+            <div class="rec" id="rec">
+              <span class="rdot"></span>
+              <span class="rlab" id="rlab"><svg class="i"><use href="#i-mic"/></svg>record &middot; Verse 1</span>
+              <span class="mkchip" id="mkchip">&#9679; 1</span>
+              <span class="stopq"><i></i></span>
+            </div>
+
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="features">
-      <div class="feat"><div class="t">Write together</div><div class="d">Invite co-writers into a room and build the lyrics live, in real time.</div></div>
-      <div class="feat"><div class="t">Catch every idea</div><div class="d">A title, a line, a phrase &mdash; drop it in before it's gone.</div></div>
-      <div class="feat"><div class="t">Every take, marked</div><div class="d">Record melodies, mark the moments that matter, cue them on recording day.</div></div>
-      <div class="feat"><div class="t">Get unstuck</div><div class="d">Writing help that reads your lyrics to help you think &mdash; never writes your song.</div></div>
+      <div class="feat"><div class="ic"><svg class="i"><use href="#i-users"/></svg></div><div class="t">Write together</div><div class="d">Invite co-writers into a room and build the lyrics live, in real time.</div></div>
+      <div class="feat"><div class="ic"><svg class="i"><use href="#i-bulb"/></svg></div><div class="t">Catch every idea</div><div class="d">A title, a line, a phrase &mdash; drop it in before it's gone.</div></div>
+      <div class="feat"><div class="ic"><svg class="i"><use href="#i-mic"/></svg></div><div class="t">Every take, marked</div><div class="d">Record melodies, mark the moments that matter, cue them on recording day.</div></div>
+      <div class="feat"><div class="ic"><svg class="i"><use href="#i-spark"/></svg></div><div class="t">Get unstuck</div><div class="d">Writing help that reads your lyrics to help you think &mdash; never writes your song.</div></div>
     </div>
   </section>
 
@@ -211,6 +414,78 @@
       btn.disabled = false; btn.textContent = 'Join the beta';
     }
   }
+
+  // ── The room writes itself: co-writing, then a real take recorded ──
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const L1 = "The lights go out when you leave";
+  const L2 = "Something about the way the room breathes";
+  const $ = (id) => document.getElementById(id);
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const words = () => ((($('line1').textContent + ' ' + $('line2').textContent).trim().match(/\S+/g) || []).length) + 'w';
+
+  async function typeInto(el, text, cur) {
+    cur.classList.add('on');
+    for (const ch of text) {
+      el.textContent += ch;
+      $('wc').textContent = words();
+      await sleep(34 + Math.random() * 46);
+    }
+    cur.classList.remove('on');
+  }
+
+  async function record() {
+    const rec = $('rec'), rlab = $('rlab'), mk = $('mkchip');
+    rec.classList.add('live');
+    for (let s = 0; s <= 6; s++) {
+      rlab.innerHTML = '<span style="color:var(--red);font-weight:800">rec</span>&nbsp;&middot; Verse 1 &middot; <span class="rt">0:0' + s + '</span>';
+      if (s === 3) mk.classList.add('pop');
+      await sleep(650);
+    }
+    rec.classList.remove('live');
+    mk.classList.remove('pop');
+    rlab.innerHTML = '<svg class="i"><use href="#i-mic"/></svg>record &middot; Verse 1';
+  }
+
+  async function demoLoop() {
+    const line1 = $('line1'), line2 = $('line2');
+    if (reduced) {
+      line1.textContent = L1; line2.textContent = L2;
+      $('syl1').classList.add('on'); $('syl2').classList.add('on');
+      $('saved').classList.add('on'); $('wc').textContent = words();
+      return;
+    }
+    for (;;) {
+      line1.textContent = ''; line2.textContent = '';
+      $('syl1').classList.remove('on'); $('syl2').classList.remove('on');
+      $('saved').classList.remove('on'); $('typing').classList.remove('on');
+      $('wc').textContent = '0w';
+      await sleep(1000);
+      await typeInto(line1, L1, $('cur1'));
+      $('syl1').classList.add('on');
+      await sleep(400);
+      $('typing').classList.add('on');
+      await sleep(1400);
+      $('typing').classList.remove('on');
+      await typeInto(line2, L2, $('cur2'));
+      $('syl2').classList.add('on');
+      $('saved').classList.add('on');
+      await sleep(900);
+      await record();
+      await sleep(3600);
+    }
+  }
+  demoLoop();
+
+  // Scroll-reveal for feature cards (staggered)
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('in'), (Array.from(document.querySelectorAll('.feat')).indexOf(e.target) % 4) * 110);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.feat').forEach((f) => (reduced ? f.classList.add('in') : io.observe(f)));
 </script>
 
 </body>
