@@ -149,8 +149,9 @@
   .vseg { display:flex; gap:5px; background:var(--surface-hi); border-radius:13px; padding:4px; }
   .vseg div { flex:1; text-align:center; padding:8px 0; border-radius:10px; font-size:10.5px; font-weight:600; color:var(--dim); }
   .vseg .on { background:var(--gold); color:#0C0B0E; font-weight:800; }
-  .vtake { background:var(--surface-hi); border-radius:14px; padding:11px; opacity:0; transform:translateY(16px); transition:opacity .45s ease, transform .5s cubic-bezier(.2,.9,.3,1.2); }
-  .vtake.in { opacity:1; transform:none; }
+  .vtake { background:var(--surface-hi); border-radius:14px; padding:11px; display:none; }
+  .vtake.in { display:block; animation:takein .55s cubic-bezier(.2,.9,.3,1.2); }
+  @keyframes takein { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
   .vt-top { display:flex; align-items:center; gap:9px; }
   .vt-play { width:32px; height:32px; border-radius:50%; background:var(--verse); flex:none; display:flex; align-items:center; justify-content:center; }
   .vt-play i { width:0; height:0; border-style:solid; border-width:5px 0 5px 9px; border-color:transparent transparent transparent #0C0B0E; margin-left:2px; }
@@ -518,7 +519,8 @@
     $('segVoice').classList.toggle('on', v === 'voice');
     $('roomView').style.display = v === 'room' ? 'flex' : 'none';
     $('voiceView').style.display = v === 'voice' ? 'flex' : 'none';
-    $('rec').style.display = v === 'room' ? 'flex' : 'none';
+    // the docked record bar follows you across tabs while a take is rolling (like the app)
+    $('rec').style.display = (v === 'room' || $('rec').classList.contains('live')) ? 'flex' : 'none';
   }
   const words = () => ((($('line1').textContent + ' ' + $('line2').textContent).trim().match(/\S+/g) || []).length) + 'w';
 
@@ -567,6 +569,7 @@
     rec.classList.remove('live');
     mk.classList.remove('pop');
     rlab.innerHTML = '<svg class="i"><use href="#i-mic"/></svg>record &middot; Verse 1';
+    if ($('voiceView').style.display !== 'none') rec.style.display = 'none'; // stopped while on voice → bar tucks away
   }
 
   async function demoLoop() {
@@ -595,11 +598,12 @@
       $('syl2').classList.add('on');
       $('saved').classList.add('on');
       await sleep(900);
-      await record();
+      const recording = record();      // red bar starts counting in the room…
+      await sleep(1800);
+      switchTab('voice');              // …and keeps recording across the tab flip, like the real app
+      await recording;                 // 0:06, marker popped, stop
       await sleep(500);
-      switchTab('voice');
-      await sleep(250);
-      $('vtake').classList.add('in');
+      $('vtake').classList.add('in');  // the new take drops into the list
       await sleep(3400);
       switchTab('room');
       await sleep(1000);
