@@ -162,6 +162,11 @@
   .vt-foot { display:flex; align-items:center; gap:6px; margin-top:10px; }
   .vt-sec { display:flex; align-items:center; gap:4px; background:rgba(96,165,250,0.16); color:var(--verse); border-radius:14px; padding:5px 10px; font-size:9.5px; font-weight:700; }
   .vt-sec i { width:5px; height:5px; border-radius:50%; background:var(--verse); }
+  .vt-gold .vt-play { background:var(--gold-bright); }
+  .vt-gold .vt-wave i { background:var(--gold-bright); }
+  .vt-gold .vt-sec { background:rgba(212,180,131,0.14); color:var(--gold-bright); }
+  .vt-gold .vt-sec i { background:var(--gold-bright); }
+  .vt-starred { color:var(--gold-bright); }
   .vt-sp { flex:1; }
   .vt-pill { background:var(--bg); color:var(--dim); border-radius:14px; padding:5px 10px; font-size:9.5px; font-weight:600; }
   .vt-tile { width:26px; height:26px; border-radius:9px; background:var(--bg); display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:11px; }
@@ -384,6 +389,23 @@
                   <span class="vt-tile"><svg class="i"><use href="#i-trash"/></svg></span>
                 </div>
               </div>
+              <div class="vtake vt-gold in">
+                <div class="vt-top">
+                  <div class="vt-play"><i></i></div>
+                  <div class="vt-mid">
+                    <div class="vt-label" style="color:var(--text);">chorus melody, the high one</div>
+                    <div class="vt-wave" id="vtwave2"></div>
+                  </div>
+                  <span class="vt-dur">0:16</span>
+                </div>
+                <div class="vt-foot">
+                  <span class="vt-sec"><i></i>Chorus</span>
+                  <span class="vt-sp"></span>
+                  <span class="vt-pill">shared</span>
+                  <span class="vt-tile vt-starred"><svg class="i"><use href="#i-star"/></svg></span>
+                  <span class="vt-tile"><svg class="i"><use href="#i-trash"/></svg></span>
+                </div>
+              </div>
             </div>
 
             <div class="rec" id="rec">
@@ -502,8 +524,10 @@
 
   // take-card waveform + living divider + phone tilt + headline rise
   (() => {
-    const tw = $('vtwave');
-    for (let i = 0; i < 22; i++) { const b = document.createElement('i'); b.style.height = (18 + Math.random() * 82) + '%'; tw.appendChild(b); }
+    for (const id of ['vtwave', 'vtwave2']) {
+      const tw = $(id);
+      if (tw) for (let i = 0; i < 22; i++) { const b = document.createElement('i'); b.style.height = (18 + Math.random() * 82) + '%'; tw.appendChild(b); }
+    }
     const wl = $('waveline');
     for (let i = 0; i < 64; i++) { const b = document.createElement('i'); b.style.height = (12 + Math.random() * 80) + '%'; b.style.animationDelay = (Math.random() * 2.2).toFixed(2) + 's'; b.style.animationDuration = (1.6 + Math.random() * 1.6).toFixed(2) + 's'; wl.appendChild(b); }
     if (!reduced) wl.classList.add('anim');
