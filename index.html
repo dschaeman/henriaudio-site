@@ -500,6 +500,15 @@
   }
   tabs.forEach(t => t.addEventListener('click', () => showTab(t.dataset.tab)));
 
+  // Deep links from other pages (/#about, /#contact) open the matching panel.
+  function showFromHash() {
+    const name = (location.hash || '').slice(1);
+    if (document.getElementById(name) && document.querySelector(`button.tab[data-tab="${name}"]`))
+      showTab(name);
+  }
+  showFromHash();
+  window.addEventListener('hashchange', showFromHash);
+
   // Waitlist → Supabase (publishable key is safe in public code; RLS allows insert-only)
   const db = supabase.createClient(
     "https://httztneqksrdifvtmgsy.supabase.co",
