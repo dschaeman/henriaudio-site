@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="theme-color" content="#0C0B0E" />
 <title>Utility Deck &mdash; free plugin by Henri Audio</title>
-<meta name="description" content="Utility Deck by Henri Audio — the control panel that lives on every track. Filters, shelves, PUSH, DEPTH, width, bass mono. Zero samples of latency. Free for Mac, AU + VST3." />
+<meta name="description" content="Utility Deck by Henri Audio — the control panel that lives on every track. Coming soon, free for Mac, AU + VST3. Zero samples of latency. Join the waitlist." />
 <meta property="og:title" content="Utility Deck — free plugin by Henri Audio" />
-<meta property="og:description" content="The control panel that lives on every track. Zero latency. Free for Mac, AU + VST3." />
+<meta property="og:description" content="The control panel that lives on every track. Coming soon — free for Mac, AU + VST3. Join the waitlist." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://henriaudio.com/deck/" />
 <meta property="og:image" content="https://henriaudio.com/deck/assets/deck-ui.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Utility Deck — free plugin by Henri Audio" />
-<meta name="twitter:description" content="The control panel that lives on every track. Zero latency. Free for Mac, AU + VST3." />
+<meta name="twitter:description" content="The control panel that lives on every track. Coming soon — free for Mac, AU + VST3. Join the waitlist." />
 <meta name="twitter:image" content="https://henriaudio.com/deck/assets/deck-ui.png" />
 <style>
   :root {
@@ -122,22 +122,22 @@
     <div class="glow" aria-hidden="true"></div>
 
     <div class="hero-copy">
-      <div class="eyebrow">Free plugin &middot; Mac &middot; AU + VST3</div>
+      <div class="eyebrow">Coming soon &middot; Free &middot; Mac &middot; AU + VST3</div>
       <h1>Utility Deck</h1>
       <p class="lede">The control panel that lives on every track.</p>
       <p class="sub">One window for the moves you make on every track: quick tone shaping and filters, three-dimensional placement &mdash; front to back, wide to narrow, left to right &mdash; and PUSH, the magic better button. Everything is built for quick, easy automation. Zero latency. No phase issues.</p>
 
       <form class="beta" id="dl-form" onsubmit="getDeck(event)">
         <input id="dl-email" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" aria-label="Email address" />
-        <button id="dl-btn" type="submit">Get Deck</button>
+        <button id="dl-btn" type="submit">Join the waitlist</button>
       </form>
       <div class="form-msg" id="form-msg"></div>
-      <p class="trust">One email with your download link, then a note when Deck updates. Nothing else.</p>
+      <p class="trust">One email the day Deck is ready, then a note when it updates. Nothing else.</p>
     </div>
 
     <div class="shot-wrap">
       <img class="shot" src="assets/deck-ui.png" alt="Utility Deck plugin interface — dark panel with gold knobs, response curve, PUSH button, and DEPTH slider" />
-      <div class="shot-cap">Utility Deck 0.4 &mdash; actual interface</div>
+      <div class="shot-cap">Utility Deck &mdash; actual interface</div>
     </div>
   </section>
 
@@ -170,7 +170,7 @@
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/vendor/supabase.js"></script>
 <script>
   // ── Email gate → same Supabase waitlist as the main site, tagged source:'deck' ──
   const db = supabase.createClient(
@@ -191,12 +191,11 @@
       const { error } = await db.from('waitlist').insert({ email: email, source: 'deck', name: '' });
       if (error && error.code !== '23505') throw error;
       document.getElementById('dl-form').outerHTML =
-        '<div class="beta-success">Downloading Utility Deck&hellip; If it doesn’t start, <a href="/deck/UtilityDeck.pkg">download it here</a>. Double-click the installer, restart your DAW, and look under Henri Audio.</div>';
+        '<div class="beta-success">You&rsquo;re on the list. The day Utility Deck is ready, the download link lands in your inbox.</div>';
       msg.textContent = '';
-      window.location.href = '/deck/UtilityDeck.pkg';
     } catch (err) {
       showMsg('Something went wrong. Please try again.', true);
-      btn.disabled = false; btn.textContent = 'Get Deck';
+      btn.disabled = false; btn.textContent = 'Join the waitlist';
     }
   }
 </script>
