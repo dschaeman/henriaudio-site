@@ -81,7 +81,11 @@
   .form-msg { font-size:14px; margin-top:12px; min-height:18px; }
   .form-msg.err { color:#E8918B; }
   .form-msg.ok { color:var(--gold-bright); }
-  .beta-success { max-width:440px; background:var(--gold-wash); border:none; border-radius:15px; padding:20px; font-size:15px; color:var(--text); box-shadow:0 4px 18px rgba(0,0,0,0.3); }
+  .beta-success { max-width:440px; background:var(--gold-wash); border:none; border-radius:15px; padding:22px; color:var(--text); box-shadow:0 4px 18px rgba(0,0,0,0.3); }
+  .bs-head { font-size:19px; font-weight:800; letter-spacing:-0.3px; margin-bottom:7px; }
+  .bs-body { font-size:15px; line-height:1.5; color:var(--dim); margin:0 0 17px; }
+  .bs-cta { display:inline-block; background:var(--gold-bright); color:#0C0B0E; border-radius:13px; font-size:15px; font-weight:800; padding:14px 24px; box-shadow:0 4px 22px rgba(212,180,131,0.28); transition:transform .15s, opacity .15s; }
+  .bs-cta:hover { opacity:.92; transform:translateY(-1px); }
 
   /* ── The phone: the REAL writing room, writing itself ─────────── */
   .phone-wrap { position:relative; z-index:2; display:flex; justify-content:center; }
@@ -529,8 +533,17 @@
     try {
       const { error } = await db.from('waitlist').insert({ email: email, source: 'henriaudio.com', name: name });
       if (error && error.code !== '23505') throw error; // 23505 = already on the list, treat as success
+      // They are allowlisted the instant this row lands (a DB trigger does it), so
+      // the beta is already open TO THEM. Telling them to wait for an email was
+      // sending every signup to a dead stop — Sep 21, four in one morning.
+      // The link carries their address so the app's signup is prefilled with the
+      // SAME email that is on the list.
       document.getElementById('beta-form').outerHTML =
-        '<div class="beta-success">You’re on the list. We’ll email you the moment the beta opens.</div>';
+        '<div class="beta-success">' +
+          '<div class="bs-head">You’re in.</div>' +
+          '<p class="bs-body">No waiting. Create your account with this same email and start writing. It runs right in your browser, on your phone too.</p>' +
+          '<a class="bs-cta" href="https://app.henriaudio.com/?email=' + encodeURIComponent(email) + '">Open Writer’s Room</a>' +
+        '</div>';
       msg.textContent = '';
     } catch (err) {
       showMsg('Something went wrong. Please try again.', true);
