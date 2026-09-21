@@ -45,7 +45,11 @@
   .form-msg { font-size:14px; margin-top:12px; min-height:18px; }
   .form-msg.err { color:#E8918B; }
   .form-msg.ok { color:var(--gold); }
-  .beta-success { background:#2B241F; border:none; border-radius:15px; padding:22px; font-size:16px; color:var(--text); box-shadow:0 4px 18px rgba(0,0,0,0.3); }
+  .beta-success { background:#2B241F; border:none; border-radius:15px; padding:24px; color:var(--text); box-shadow:0 4px 18px rgba(0,0,0,0.3); }
+  .bs-head { font-family:var(--sans); font-size:21px; font-weight:800; letter-spacing:-0.3px; margin-bottom:8px; }
+  .bs-body { font-size:15.5px; line-height:1.55; color:var(--dim); margin:0 0 18px; }
+  .bs-cta { display:inline-block; background:var(--gold); color:#0C0B0E; border-radius:13px; font-family:var(--sans); font-size:15px; font-weight:800; padding:15px 26px; box-shadow:0 4px 18px rgba(212,180,131,0.22); transition:opacity .15s, transform .15s; }
+  .bs-cta:hover { opacity:.9; transform:translateY(-1px); }
 
   .feats { list-style:none; padding:0; margin:40px 0 0; text-align:left; display:grid; gap:12px; }
   .feats li { background:var(--surface); border:none; border-radius:15px; padding:18px 20px; box-shadow:0 3px 14px rgba(0,0,0,0.32); }
@@ -132,8 +136,16 @@
     try {
       const { error } = await db.from('waitlist').insert({ email: email, source: ref, name: name });
       if (error && error.code !== '23505') throw error; // 23505 = already on the list, treat as success
+      // A DB trigger allowlists this address the instant the row lands, so the beta is
+      // already open to them. "We'll email you" sent every signup to a dead stop and
+      // nothing ever sent that email — Sep 21, the day the TikTok bio pointed here.
+      // The link carries their address so the app prefills the SAME one that is allowed.
       document.getElementById('beta-form').outerHTML =
-        '<div class="beta-success">You’re on the list. We’ll email you the moment your spot opens up. 🎵</div>';
+        '<div class="beta-success">' +
+          '<div class="bs-head">You’re in.</div>' +
+          '<p class="bs-body">No waiting. Create your account with this same email and start writing. It runs right in your browser, on your phone too.</p>' +
+          '<a class="bs-cta" href="https://app.henriaudio.com/?email=' + encodeURIComponent(email) + '">Open Writer’s Room</a>' +
+        '</div>';
       msg.textContent = '';
     } catch (err) {
       btn.disabled = false; btn.textContent = 'Get early access';
