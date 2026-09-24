@@ -56,7 +56,7 @@
   @keyframes fade { from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
 
   /* ── Hero ─────────────────────────────────────────────────────── */
-  .hero-grid { display:grid; grid-template-columns:1.02fr 0.98fr; gap:44px; align-items:center; padding:60px 0 40px; position:relative; }
+  .hero-grid { display:grid; grid-template-columns:1.02fr 0.98fr; gap:44px; align-items:start; padding:32px 0 12px; position:relative; }
   .glow { position:absolute; right:-90px; top:50%; transform:translateY(-50%); width:640px; height:640px; border-radius:50%; pointer-events:none;
     background:radial-gradient(circle, rgba(212,180,131,0.15) 0%, rgba(212,180,131,0.05) 42%, rgba(212,180,131,0) 68%);
     animation:breathe 5.5s ease-in-out infinite; }
@@ -264,7 +264,174 @@
     .glow, .rec, .tdot, .cursor.on, .rec .rdot { animation:none !important; }
     .feat { transition:none; }
   }
+  .beta-offer { max-width:440px; margin:0 0 14px; font-size:15px; color:var(--gold-bright); }
+  .beta-offer strong { color:var(--text); }
+  .beta-note { font-size:12px; color:var(--dim); margin:12px 0 0; max-width:440px; }
+  .watch-link { display:inline-block; margin-top:12px; font-size:14px; font-weight:700; }
+  .founder-film { display:grid; grid-template-columns:1fr 340px; align-items:center; gap:56px; padding:40px; margin:8px 0 48px; border:1px solid rgba(212,180,131,.14); border-radius:28px; background:radial-gradient(ellipse at bottom left,rgba(212,180,131,.08),transparent 65%),var(--surface-hi); scroll-margin-top:90px; }
+  .founder-film h2 { font-family:var(--lyric); font-weight:400; font-size:46px; line-height:1.15; letter-spacing:-1.3px; margin:16px 0 24px; }
+  .founder-film h2 em { color:var(--gold-bright); }
+  .founder-film p { color:var(--dim); font-size:17px; }
+  .film-label { color:var(--gold-bright); font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; }
+  .film-player { position:relative; overflow:hidden; border-radius:18px; background:#000; box-shadow:0 20px 60px #0006; }
+  .film-player video { display:block; width:100%; aspect-ratio:9/16; object-fit:contain; }
+  .film-play { position:absolute; inset:0; width:100%; border:0; cursor:pointer; color:white; background:linear-gradient(transparent 40%,rgba(0,0,0,.7)); display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:12px; padding:32px; font:600 14px var(--sans); }
+  .film-play span { display:grid; place-items:center; width:58px; height:58px; border-radius:50%; background:var(--gold-bright); color:#0c0b0e; font-size:24px; padding-left:3px; }
+  .film-play[hidden] { display:none; }
+  .film-play:focus-visible, .watch-link:focus-visible { outline:3px solid var(--gold-bright); outline-offset:4px; }
+  @media(max-width:880px) {
+    .hero-grid { padding-top:28px; gap:24px; }
+    .hero-logo { width:48px; height:48px; margin-bottom:14px; }
+    .eyebrow { margin-bottom:12px; }
+    .trust { margin-bottom:18px; }
+    .founder-film { grid-template-columns:1fr; gap:24px; padding:28px 24px; text-align:center; }
+    .founder-film h2 { font-size:36px; }
+    .film-player { width:100%; max-width:340px; margin:auto; }
+    form.beta input { font-size:16px; }
+  }
+
+  /* Separate entrance, float and pointer transforms so they never fight. */
+  .phone-wrap { perspective:1200px; isolation:isolate; --light-x:50%; --light-y:40%; }
+  .phone-entrance { position:relative; z-index:1; transform-style:preserve-3d; }
+  .phone-float { transform-style:preserve-3d; }
+  .vid-frame { transition:transform .65s cubic-bezier(.16,1,.3,1); transform-style:preserve-3d;
+    box-shadow:18px 38px 64px #0009,0 0 0 1px #d4b48330,inset 2px 2px 2px #ffffff20,0 0 65px #d4b48314; }
+  .phone-halo { position:absolute; inset:8% -12% -2%; z-index:0; pointer-events:none; border-radius:50%; filter:blur(22px);
+    background:radial-gradient(ellipse at var(--light-x) var(--light-y),#d4b48330, #d4b48308 42%,transparent 68%); }
+  .phone-wrap::after { content:''; position:absolute; bottom:-20px; width:65%; height:35px; background:#0009; filter:blur(16px); border-radius:50%; pointer-events:none; }
+  .phone-shine { position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+    background:radial-gradient(ellipse at var(--light-x) var(--light-y),#fff 0%,transparent 65%); opacity:.035; }
+  .phone-arrived .phone-entrance { animation:phone-swoop 1.65s cubic-bezier(.16,1,.3,1) both; }
+  .phone-arrived .phone-float { animation:phone-hover 7s ease-in-out 1.65s infinite; }
+  @keyframes phone-swoop {
+    0% { opacity:0; transform:translate3d(150px,110px,-260px) rotateX(14deg) rotateY(-32deg) rotateZ(16deg) scale(.78); }
+    65% { opacity:1; transform:translate3d(-8px,-12px,0) rotateX(-2deg) rotateY(4deg) rotateZ(-3deg) scale(1.015); }
+    100% { opacity:1; transform:translate3d(0,0,0) rotateX(0) rotateY(0) rotateZ(0) scale(1); }
+  }
+  @keyframes phone-hover { 0%,100% { transform:translateY(0) rotateZ(-1deg); } 50% { transform:translateY(-12px) rotateZ(1deg); } }
+  @media(max-width:880px) {
+    .phone-halo { inset:8% 0; }
+    @keyframes phone-swoop {
+      from { opacity:0; transform:translate3d(32px,55px,0) rotateZ(7deg) scale(.92); }
+      to { opacity:1; transform:none; }
+    }
+  }
+  @media(prefers-reduced-motion:reduce) {
+    .phone-arrived .phone-entrance,.phone-arrived .phone-float { animation:none; }
+    .vid-frame { transition:none; transform:none!important; }
+  }
+
+
+  /* Graphite titanium enclosure. Hardware sits outside the app viewport. */
+  .vid-frame {
+    padding:7px; border-radius:43px;
+    background:linear-gradient(105deg,#757778 0%,#252728 1.2%,#101112 2.4%,#060708 48%,#101112 97%,#737577 99%,#222426 100%);
+    border:1px solid #8a8b8c;
+    box-shadow:inset 0 1px 1px #ffffff80,inset 0 -1px 1px #000, 0 0 0 2px #151618, 5px 3px 0 1px #252729, 7px 5px 0 #08090a, 20px 40px 65px #000a,0 0 70px #d4b4830c;
+  }
+  .vid-frame::before { right:-5px; top:170px; width:4px; height:62px; border-radius:0 3px 3px 0; background:linear-gradient(90deg,#161819,#747778,#303233); box-shadow:0 1px 1px #000,0 -1px 1px #9b9e9e; }
+  .vid-frame::after { left:-4px; top:142px; width:3px; height:38px; border-radius:3px 0 0 3px; background:linear-gradient(90deg,#828486,#252729); box-shadow:0 48px 0 #505254,0 -55px 0 -0.2px #626466; }
+  .vid-phone { position:relative; padding:0; aspect-ratio:420/974; border-radius:35px; background:#0c0b0e; box-shadow:0 0 0 2px #000,0 0 0 3px #ffffff08; }
+  .phone-island { position:absolute; top:14px; left:50%; transform:translateX(-50%); width:76px; height:20px; border-radius:20px; background:#020203; box-shadow:inset 0 1px 1px #ffffff0b,0 1px 2px #0005; z-index:3; pointer-events:none; }
+  .phone-island::after { content:''; position:absolute; right:7px; top:6px; width:8px; height:8px; border-radius:50%; background:radial-gradient(circle at 35% 30%,#263c50,#0a131d 40%,#020305 70%); box-shadow:0 0 0 1px #101216; }
+  .vid-phone video { width:100%; height:100%; object-fit:contain; transform:none; }
+  .phone-shine { inset:2px; border-radius:43px; opacity:.055; background:linear-gradient(118deg,transparent 15%,#fff 16%,#ffffff14 31%,transparent 43%),radial-gradient(ellipse at var(--light-x) var(--light-y),#fff,transparent 65%); }
+
+  /* The real recording includes its own status bar and Dynamic Island. */
+  .vid-phone { aspect-ratio:660/1434; background:#0c0b0e; }
+  .phone-island { display:none; }
+  .phone-wrap { flex-wrap:wrap; }
+  .demo-caption { flex:0 0 100%; text-align:center; margin:26px 0 0; color:var(--gold-bright); font-size:13px; font-weight:600; letter-spacing:.3px; }
+  .phone-wrap::after { bottom:36px; }
+
+  .idea-card { position:absolute; z-index:5; left:50%; top:35%; width:154px; margin-left:-77px; padding:13px 16px; border-radius:14px; border:1px solid #d4b48345; background:#201d24; box-shadow:0 14px 35px #0008; color:var(--text); font-size:14px; font-weight:650; pointer-events:none; opacity:0; }
+  .idea-card small { display:block; color:var(--gold-bright); font-size:10px; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:5px; }
+  .idea-card:nth-of-type(1) { --ix:-155px; --iy:-95px; --ir:-12deg; --delay:.2s; }
+  .idea-card:nth-of-type(2) { --ix:150px; --iy:20px; --ir:10deg; --delay:.4s; }
+  .idea-card:nth-of-type(3) { --ix:-125px; --iy:160px; --ir:-7deg; --delay:.6s; }
+  .phone-arrived .idea-card { animation:ideas-together 3.2s cubic-bezier(.2,.8,.2,1) var(--delay) both; }
+  @keyframes ideas-together {
+    0% { opacity:0; transform:translate(var(--ix),calc(var(--iy) + 35px)) rotate(var(--ir)) scale(.85); }
+    18%,55% { opacity:1; transform:translate(var(--ix),var(--iy)) rotate(var(--ir)) scale(1); }
+    85%,100% { opacity:0; transform:translate(0,0) rotate(0) scale(.18); }
+  }
+  .demo-controls { flex:0 0 100%; max-width:440px; margin:14px auto 0; display:grid; grid-template-columns:repeat(3,1fr); gap:7px; position:relative; z-index:4; }
+  .demo-chip,.demo-toggle,.replay-ideas { font:600 12px var(--sans); border:1px solid #ffffff13; color:var(--dim); background:#17151c; padding:9px 12px; border-radius:20px; cursor:pointer; transition:background .2s,color .2s; }
+  .demo-chip[aria-pressed="true"] { background:var(--gold-bright); border-color:var(--gold-bright); color:#0c0b0e; }
+  .demo-chip:hover,.demo-toggle:hover,.replay-ideas:hover { border-color:var(--gold-bright); color:var(--text); }
+  .demo-chip[aria-pressed="true"]:hover { color:#0c0b0e; }
+  .demo-chip:focus-visible,.demo-toggle:focus-visible,.replay-ideas:focus-visible { outline:2px solid var(--gold-bright); outline-offset:3px; }
+  .demo-utility { flex:0 0 100%; display:flex; justify-content:center; gap:14px; margin-top:10px; position:relative; z-index:4; }
+  .demo-toggle,.replay-ideas { background:none; border-color:transparent; font-size:11px; padding:5px; }
+  .phone-wrap::after { bottom:135px; }
+  .founder-film.reveal-ready { opacity:0; transform:translateY(32px); transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1); }
+  .founder-film.reveal-ready.is-revealed { opacity:1; transform:none; }
+  @media(max-width:880px) { .idea-card { width:132px; margin-left:-66px; font-size:12px; } .idea-card:nth-of-type(1) { --ix:-75px; } .idea-card:nth-of-type(2) { --ix:75px; } .idea-card:nth-of-type(3) { --ix:-55px; } }
+  @media(prefers-reduced-motion:reduce) { .phone-arrived .idea-card { animation:none; display:none; } .founder-film.reveal-ready { opacity:1; transform:none; transition:none; } .replay-ideas { display:none; } }
+
+  @media(min-width:881px) {
+    .vid-frame { width:264px; }
+    .demo-caption { margin-top:18px; }
+    .demo-controls { margin-top:10px; max-width:380px; }
+    .demo-utility { margin-top:6px; }
+  }
+
+  .beta-offer { padding:14px 16px; background:linear-gradient(115deg,#d4b48319,#d4b48308); border:1px solid #d4b48340; border-radius:13px; }
+  #beta-form { scroll-margin-top:100px; }
+  .demo-controls { max-width:440px; }
+  .demo-chip { padding:10px 8px; }
+  .faq-section { max-width:760px; margin:72px auto 56px; }
+  .faq-section h2,.closing-invite h2 { font-family:var(--lyric); font-weight:400; font-size:36px; line-height:1.2; letter-spacing:-.7px; margin:12px 0 28px; }
+  .faq-section details { border-bottom:1px solid #ffffff12; }
+  .faq-section summary { cursor:pointer; font-size:16px; font-weight:600; padding:21px 30px 21px 0; list-style:none; position:relative; }
+  .faq-section summary::-webkit-details-marker { display:none; }
+  .faq-section summary::after { content:'+'; position:absolute; right:3px; color:var(--gold-bright); font-size:21px; top:16px; }
+  .faq-section details[open] summary::after { content:'−'; }
+  .faq-section details p { margin:0 0 22px; padding-right:24px; color:var(--dim); font-size:15px; }
+  .faq-section summary:focus-visible,.closing-button:focus-visible { outline:2px solid var(--gold-bright); outline-offset:4px; }
+  .closing-invite { text-align:center; border:1px solid #d4b48328; border-radius:24px; padding:42px 24px; background:radial-gradient(ellipse at top,#d4b48315,transparent 75%); }
+  .closing-invite h2 { margin-bottom:14px; }
+  .closing-invite p { color:var(--dim); margin:0 0 24px; }
+  .closing-button { display:inline-block; background:var(--gold-bright); color:#0c0b0e; padding:13px 28px; border-radius:12px; font-weight:750; }
+  .closing-invite span { display:block; margin-top:16px; color:var(--faint); font-size:12px; }
+  @media(max-width:640px) { .faq-section { margin-top:48px; } .faq-section h2,.closing-invite h2 { font-size:30px; } .demo-chip { font-size:11px; } }
+
 </style>
+<style>
+  /* ── A door back in (Sep 23, 2026) ─────────────────────────────────────────────
+     The bio link led to "join the beta" with no way for anyone who had ALREADY joined to
+     reach the app. Now: "Open the app" in the nav, "Already joined?" under both join forms,
+     and a note that shows only inside Instagram/TikTok/Facebook's own browsers, where 13 of
+     22 TikTok-wave signups landed and David found the app "jumpy". */
+  .nav-app { flex:none; display:inline-flex; align-items:center; margin-left:10px; color:var(--gold-bright); border:1.5px solid var(--gold-muted); border-radius:11px; font-size:14px; font-weight:700; padding:7px 13px; white-space:nowrap; transition:border-color .15s, color .15s; }
+  .nav-app:hover { border-color:var(--gold-bright); color:var(--text); }
+  .signin-row { max-width:440px; margin:16px 0 0; padding-top:14px; border-top:1px solid var(--border); font-size:14.5px; color:var(--dim); }
+  .signin-row a { color:var(--gold-bright); font-weight:700; white-space:nowrap; }
+  .closing-signin { display:block; margin-top:14px; font-size:14.5px; color:var(--dim); }
+  .closing-signin a { color:var(--gold-bright); font-weight:700; }
+  .inapp-note, .bs-inapp { display:none; }
+  html.in-app .inapp-note { display:flex; align-items:flex-start; gap:10px; text-align:left; max-width:440px; margin:0 0 22px; padding:12px 12px 12px 15px; background:var(--gold-wash); border-radius:13px; font-size:14px; line-height:1.5; color:var(--text); }
+  html.in-app .bs-inapp { display:block; font-size:13.5px; line-height:1.5; color:var(--gold-bright); margin:14px 0 0; }
+  .inapp-note b { color:var(--gold-bright); }
+  .inapp-x { flex:none; background:none; border:none; color:var(--dim); font-size:20px; line-height:1; padding:0 4px; cursor:pointer; }
+  @media (max-width:640px) {
+    .nav-app { font-size:12px; padding:6px 10px; margin-left:8px; }
+    .signin-row { text-align:center; margin-left:auto; margin-right:auto; }
+    html.in-app .inapp-note { margin-left:auto; margin-right:auto; }
+  }
+</style>
+<script>
+  // Tag the page when it is open inside an app's own browser (Instagram, TikTok, Facebook).
+  (function () {
+    var ua = navigator.userAgent || "";
+    var app = /Instagram/.test(ua) ? "Instagram" : /musical_ly|BytedanceWebview|TikTok/i.test(ua) ? "TikTok" : /FBAN|FBAV/.test(ua) ? "Facebook" : "";
+    if (!app) return;
+    var d = document.documentElement;
+    d.classList.add("in-app");
+    d.setAttribute("data-inapp", app);
+    d.setAttribute("data-browser", /iPhone|iPad|iPod/.test(ua) ? "Safari" : "your browser");
+  })();
+</script>
 </head>
 <body>
 
@@ -303,6 +470,7 @@
       <button class="tab" data-tab="about">About</button>
       <button class="tab" data-tab="contact">Contact</button>
     </div>
+    <a class="nav-app" href="https://app.henriaudio.com/">Open the app</a>
   </div>
 </nav>
 
@@ -314,26 +482,34 @@
       <div class="glow" aria-hidden="true"></div>
 
       <div class="hero-copy">
+        <div class="inapp-note" role="note">
+          <span>You're inside <b class="inapp-name">Instagram</b>'s browser. Writer's Room runs smoother in <b class="inapp-browser">Safari</b>: tap <b>•••</b> at the top and open this page in your browser.</span>
+          <button type="button" class="inapp-x" aria-label="Dismiss" onclick="this.parentNode.remove()">×</button>
+        </div>
         <img class="hero-logo" src="assets/icon.png" alt="Writer's Room" />
         <div class="eyebrow">A Henri Audio product</div>
         <h1>Writer's Room</h1>
         <p class="lede">The whole song, in one room.</p>
-        <p class="sub">A song scatters everywhere &mdash; lyrics in Notes, voice memos buried in your phone, the bounce in Dropbox, your co-writer in a group chat. Writer's Room pulls it all into one place, built for the way a song actually comes together.</p>
+        <p class="sub">Your lyrics, voice memos, ideas, and co-writers. Finally together, in one place built for writing songs.</p>
         <p class="trust"><b>Your work stays yours.</b> Never sold, never used to train AI.</p>
 
+        <p class="beta-offer">The first <strong>250 beta users</strong> get Writer’s Room <strong>free for life.</strong></p>
         <form class="beta" id="beta-form" onsubmit="joinBeta(event)">
           <input id="wl-name" type="text" autocomplete="name" placeholder="Your name" aria-label="Your name" />
           <input id="wl-email" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" aria-label="Email address" />
           <button id="wl-btn" type="submit">Join the beta</button>
         </form>
+        <p class="beta-note">Works in your browser on phone and desktop. Join the beta, then create your account.</p>
+        <p class="signin-row">Already joined? <a href="https://app.henriaudio.com/">Open Writer's Room →</a></p>
+        <a class="watch-link" href="#launch-story">Watch why I built it ↗</a>
         <div class="form-msg" id="form-msg"></div>
       </div>
 
       <!-- The live demo: real app footage from Claude Design (demo-loop.mp4).
            The hand-coded phone animation below is kept as a rollback: swap the
            display rules on .vid-phone / .phone to switch back. -->
-      <div class="phone-wrap" aria-hidden="true">
-        <div class="vid-frame"><div class="vid-phone"><video src="/demo-loop.mp4" autoplay muted loop playsinline preload="metadata"></video></div></div>
+      <div class="phone-wrap" role="region" aria-label="Explore the app">
+        <div class="vid-frame"><div class="vid-phone"><video id="app-demo" src="/assets/real-app-demo.mp4" poster="/assets/real-app-poster.jpg" autoplay muted loop playsinline preload="metadata"></video></div></div>
         <div class="phone">
           <div class="screen">
 
@@ -448,6 +624,22 @@
       </div>
     </div>
 
+    <section class="founder-film" id="launch-story" aria-labelledby="film-heading">
+      <div>
+        <div class="film-label">The story behind Writer’s Room</div>
+        <h2 id="film-heading">Built in the room<br>where <em>songs happen.</em></h2>
+        <p>I was tired of my writing being scattered across different apps. So I spent four months building Writer’s Room in the same room where I run my sessions.</p>
+        <p>Here’s what I made, and why.</p>
+        <a class="watch-link" href="#beta-form">Join the beta ↗</a>
+      </div>
+      <div class="film-player">
+        <video id="launch-video" controls playsinline preload="none" poster="/assets/launch-cover.jpg" aria-label="Writer’s Room introduction by its founder">
+          <source src="/assets/launch-film.mp4?v=new-audio" type="video/mp4">
+          <a href="/assets/launch-film.mp4?v=new-audio">Watch the Writer’s Room introduction</a>
+        </video>
+        <button class="film-play" id="film-play" aria-label="Play the Writer’s Room introduction"><span aria-hidden="true">▶</span>Watch the story · 57 seconds</button>
+      </div>
+    </section>
     <div class="waveline" id="waveline" aria-hidden="true"></div>
 
     <div class="features">
@@ -456,6 +648,22 @@
       <div class="feat"><div class="ic"><svg class="i"><use href="#i-mic"/></svg></div><div class="t">Every take, marked</div><div class="d">Record melodies, mark the moments that matter, cue them on recording day.</div></div>
       <div class="feat"><div class="ic"><svg class="i"><use href="#i-spark"/></svg></div><div class="t">Get unstuck</div><div class="d">Writing help that reads your lyrics to help you think &mdash; never writes your song.</div></div>
     </div>
+    <section class="faq-section" aria-labelledby="faq-heading">
+      <div class="film-label">A few things to know</div>
+      <h2 id="faq-heading">Before you step into the room.</h2>
+      <details><summary>Do I need to download an app?</summary><p>No. Writer’s Room runs in your browser on your phone or desktop. Join the beta above, then create your account with the same email address.</p></details>
+      <details><summary>Can I write with other people?</summary><p>Yes. Invite your co-writers into a room and work on the same lyrics in real time. Your scratch pad stays private until you choose to share it with the room.</p></details>
+      <details><summary>Does the writing help write my song for me?</summary><p>No. The Stuck button reads your song for context and offers suggestions to help you think through a weak line or find a direction. You make the choices and write the song.</p></details>
+      <details><summary>Will my writing be used to train AI?</summary><p>No. Your work stays yours. It is never sold or used to train AI.</p></details>
+    </section>
+    <section class="closing-invite" aria-labelledby="closing-heading">
+      <div class="film-label">The beta is open</div>
+      <h2 id="closing-heading">Your next song starts here.</h2>
+      <p>The first 250 beta users get Writer’s Room free for life.</p>
+      <a class="closing-button" href="#beta-form">Join the beta ↗</a>
+      <span class="closing-signin">Already joined? <a href="https://app.henriaudio.com/">Open Writer's Room →</a></span>
+      <span>Made for the way you actually write.</span>
+    </section>
   </section>
 
   <!-- About -->
@@ -463,7 +671,7 @@
     <div class="section">
       <h2>Henri Audio</h2>
       <p class="kicker">The tools we always wished we had.</p>
-      <p>Henri Audio makes tools for musicians &mdash; designed by people who actually do the work, for the way it really happens. Built by an actual songwriter, not a software company guessing at it.</p>
+      <p>Henri Audio makes tools for musicians &mdash; designed by people who actually do the work, for the way it really happens. Built by an actual producer-songwriter, not a software company guessing at it.</p>
       <p>We started with the part we know best. <b style="color:var(--text);font-weight:600">Writer's Room</b>, our first product, is one home for the lyrics, voice memos, references, and co-writers a song usually scatters across a dozen apps.</p>
       <p>Our north star is simple: tools that <b style="color:var(--dim);font-weight:600">serve</b> musicians, never replace them. Whatever we build, your work stays yours &mdash; never sold, never used to train AI.</p>
       <p>This is just the beginning.</p>
@@ -494,6 +702,14 @@
 
 <script src="/assets/vendor/supabase.js"></script>
 <script>
+  const launchVideo = document.getElementById('launch-video');
+  const filmPlay = document.getElementById('film-play');
+  filmPlay.addEventListener('click', async () => {
+    filmPlay.hidden = true;
+    try { await launchVideo.play(); } catch { filmPlay.hidden = false; }
+  });
+  launchVideo.addEventListener('play', () => { filmPlay.hidden = true; });
+  launchVideo.addEventListener('ended', () => { filmPlay.hidden = false; });
   // Tabs
   const tabs = document.querySelectorAll('button.tab');
   const panels = document.querySelectorAll('.panel');
@@ -521,8 +737,17 @@
   const msg = document.getElementById('form-msg');
   function showMsg(text, isErr) { msg.textContent = text; msg.className = 'form-msg ' + (isErr ? 'err' : 'ok'); }
 
+  // Where did they come from? Bio links carry ?ref=instagram or ?ref=tiktok. Untagged visits say henriaudio.com.
+  const ref = (new URLSearchParams(location.search).get('ref') || 'henriaudio.com').slice(0, 40);
+  document.querySelectorAll('.inapp-name').forEach((n) => { n.textContent = document.documentElement.dataset.inapp || 'this app'; });
+  document.querySelectorAll('.inapp-browser').forEach((n) => { n.textContent = document.documentElement.dataset.browser || 'your browser'; });
+
   async function joinBeta(e) {
     e.preventDefault();
+    if (['localhost', '127.0.0.1'].includes(location.hostname)) {
+      showMsg('Preview only. No signup has been sent.', false);
+      return;
+    }
     const input = document.getElementById('wl-email');
     const btn = document.getElementById('wl-btn');
     const email = (input.value || '').trim().toLowerCase();
@@ -531,7 +756,7 @@
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { showMsg('Enter a valid email address.', true); return; }
     btn.disabled = true; btn.textContent = 'joining...'; showMsg('', false);
     try {
-      const { error } = await db.from('waitlist').insert({ email: email, source: 'henriaudio.com', name: name });
+      const { error } = await db.from('waitlist').insert({ email: email, source: ref, name: name });
       if (error && error.code !== '23505') throw error; // 23505 = already on the list, treat as success
       // They are allowlisted the instant this row lands (a DB trigger does it), so
       // the beta is already open TO THEM. Telling them to wait for an email was
@@ -543,7 +768,9 @@
           '<div class="bs-head">You’re in.</div>' +
           '<p class="bs-body">No waiting. Create your account with this same email and start writing. It runs right in your browser, on your phone too.</p>' +
           '<a class="bs-cta" href="https://app.henriaudio.com/?email=' + encodeURIComponent(email) + '">Open Writer’s Room</a>' +
+          '<p class="bs-inapp">Tip: tap ••• at the top and open this in ' + (document.documentElement.dataset.browser || 'your browser') + ' first. It runs smoother there.</p>' +
         '</div>';
+      document.querySelectorAll('.signin-row').forEach((n) => n.remove());
       msg.textContent = '';
     } catch (err) {
       showMsg('Something went wrong. Please try again.', true);
@@ -578,15 +805,115 @@
     const wl = $('waveline');
     for (let i = 0; i < 64; i++) { const b = document.createElement('i'); b.style.height = (12 + Math.random() * 80) + '%'; b.style.animationDelay = (Math.random() * 2.2).toFixed(2) + 's'; b.style.animationDuration = (1.6 + Math.random() * 1.6).toFixed(2) + 's'; wl.appendChild(b); }
     if (!reduced) wl.classList.add('anim');
-    if (!reduced && window.matchMedia('(pointer:fine)').matches) {
-      const wrapEl = document.querySelector('.phone-wrap'), ph = document.querySelector('.vid-frame');
-      wrapEl.addEventListener('mousemove', (e) => {
-        const r = ph.getBoundingClientRect();
-        const dx = (e.clientX - r.left) / r.width - 0.5, dy = (e.clientY - r.top) / r.height - 0.5;
-        ph.style.transform = 'perspective(900px) rotateY(' + (dx * 7).toFixed(2) + 'deg) rotateX(' + (-dy * 7).toFixed(2) + 'deg)';
-      });
-      wrapEl.addEventListener('mouseleave', () => { ph.style.transform = ''; });
+    const stage = document.querySelector('.phone-wrap');
+    const frame = stage.querySelector('.vid-frame');
+    const entrance = document.createElement('div');
+    entrance.className = 'phone-entrance';
+    const float = document.createElement('div');
+    float.className = 'phone-float';
+    frame.before(entrance);
+    entrance.append(float);
+    float.append(frame);
+    const halo = document.createElement('div');
+    halo.className = 'phone-halo';
+    stage.prepend(halo);
+    const shine = document.createElement('div');
+    shine.className = 'phone-shine';
+    frame.append(shine);
+    const demoCaption = document.createElement('p');
+    demoCaption.className = 'demo-caption';
+    stage.append(demoCaption);
+    const appDemo = document.getElementById('app-demo');
+    const demoChapters = [[0,'Write together'],[4,'Your private scratch pad'],[7,'Record. Mark the moment.'],[12,'Keep your concepts close'],[16,'Find rhymes in context'],[20,'Get unstuck. Keep your voice.']];
+    const chapterButtons = [];
+    const controls = document.createElement('div');
+    controls.className = 'demo-controls';
+    controls.setAttribute('role', 'group');
+    controls.setAttribute('aria-label', 'Choose an app feature');
+    const chapterNames = ['Write together','Capture ideas','Get unstuck'];
+    const demoGroups = [0,7,16];
+    demoGroups.forEach((time, i) => {
+      const button = document.createElement('button');
+      button.className = 'demo-chip';
+      button.textContent = chapterNames[i];
+      button.setAttribute('aria-pressed', 'false');
+      button.addEventListener('click', () => { appDemo.currentTime = time + .05; updateDemoCaption(); appDemo.play().catch(() => {}); });
+      chapterButtons.push(button);
+      controls.append(button);
+    });
+    stage.append(controls);
+    const utility = document.createElement('div');
+    utility.className = 'demo-utility';
+    const pauseDemo = document.createElement('button');
+    pauseDemo.className = 'demo-toggle';
+    const updatePause = () => { pauseDemo.textContent = appDemo.paused ? 'Play demo' : 'Pause demo'; };
+    pauseDemo.addEventListener('click', () => { if (appDemo.paused) appDemo.play().catch(() => {}); else appDemo.pause(); });
+    appDemo.addEventListener('play', updatePause);
+    appDemo.addEventListener('pause', updatePause);
+    updatePause();
+    utility.append(pauseDemo);
+    stage.append(utility);
+    const ideaStack = document.createElement('div');
+    ideaStack.setAttribute('aria-hidden','true');
+    ['a lyric','a melody','a voice memo'].forEach((label) => {
+      const card = document.createElement('div');
+      card.className = 'idea-card';
+      const small = document.createElement('small');
+      small.textContent = 'Bring it together';
+      card.append(small,document.createTextNode(label));
+      ideaStack.append(card);
+    });
+    stage.append(ideaStack);
+    const updateDemoCaption = () => {
+      const chapter = [...demoChapters].reverse().find(([time]) => appDemo.currentTime >= time);
+      demoCaption.textContent = chapter[1];
+      const group = appDemo.currentTime < 7 ? 0 : appDemo.currentTime < 16 ? 1 : 2;
+      chapterButtons.forEach((button, i) => button.setAttribute('aria-pressed', String(i === group)));
+    };
+    appDemo.addEventListener('timeupdate', updateDemoCaption);
+    updateDemoCaption();
+    for (const part of ['island']) {
+      const hardware = document.createElement('span');
+      hardware.className = `phone-${part}`;
+      frame.append(hardware);
     }
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const enterPhone = () => {
+      stage.classList.remove('phone-arrived');
+      if (motionPreference.matches) return;
+      void entrance.offsetWidth;
+      stage.classList.add('phone-arrived');
+    };
+    const phoneObserver = new IntersectionObserver((entries) => {
+      if (entries.some(entry => entry.isIntersecting)) { enterPhone(); phoneObserver.disconnect(); }
+    }, { threshold: .2 });
+    phoneObserver.observe(stage);
+    const founder = document.querySelector('.founder-film');
+    if (!motionPreference.matches) {
+      founder.classList.add('reveal-ready');
+      const revealObserver = new IntersectionObserver((entries) => {
+        if (entries.some(entry => entry.isIntersecting)) { founder.classList.add('is-revealed'); revealObserver.disconnect(); }
+      }, {threshold:.12});
+      revealObserver.observe(founder);
+    }
+    document.querySelector('button[data-tab="room"]').addEventListener('click', enterPhone);
+    const hero = document.querySelector('.hero-grid');
+    const resetPhone = () => {
+      frame.style.removeProperty('transform');
+      stage.style.setProperty('--light-x', '50%');
+      stage.style.setProperty('--light-y', '40%');
+    };
+    hero.addEventListener('pointermove', (e) => {
+      if (motionPreference.matches || e.pointerType === 'touch') return;
+      const r = hero.getBoundingClientRect();
+      const x = Math.max(-1, Math.min(1, (e.clientX-r.left)/r.width*2-1));
+      const y = Math.max(-1, Math.min(1, (e.clientY-r.top)/r.height*2-1));
+      frame.style.transform = `rotateX(${-y*7}deg) rotateY(${x*12}deg) rotateZ(${x*2}deg) translate3d(${x*10}px,${y*5}px,0)`;
+      stage.style.setProperty('--light-x', `${50+x*22}%`);
+      stage.style.setProperty('--light-y', `${40+y*18}%`);
+    });
+    hero.addEventListener('pointerleave', resetPhone);
+    motionPreference.addEventListener('change', resetPhone);
     if (!reduced) {
       const h = document.querySelector('#room h1');
       h.innerHTML = h.textContent.split(' ').map((w, i) => '<span class="wrev" style="animation-delay:' + (0.08 + i * 0.14) + 's">' + w + '</span>').join(' ');
