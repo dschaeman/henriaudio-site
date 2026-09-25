@@ -70,6 +70,12 @@
 
   @media (max-width:880px) { h1 { font-size:42px; letter-spacing:-1.4px; } form.notify { flex-direction:column; } }
   @media (prefers-reduced-motion: reduce) { .glow { animation:none !important; } }
+  /* The same top bar on every page (Sep 24): the Writer's Room page gained "Open the app",
+     which moved its tabs to the centre while these pages kept them on the right. David: the bar
+     must not move between pages. */
+  .nav-app { flex:none; display:inline-flex; align-items:center; margin-left:10px; color:var(--gold-bright); border:1.5px solid var(--gold-muted); border-radius:11px; font-size:14px; font-weight:700; padding:7px 13px; white-space:nowrap; text-decoration:none; transition:border-color .15s, color .15s; }
+  .nav-app:hover { border-color:var(--gold-bright); color:var(--text); }
+  @media (max-width:640px) { .nav-app { font-size:12px; padding:6px 10px; margin-left:8px; } }
 </style>
 </head>
 <body>
@@ -87,6 +93,7 @@
       <a class="tab" href="/#about">About</a>
       <a class="tab" href="/#contact">Contact</a>
     </div>
+    <a class="nav-app" href="https://app.henriaudio.com/">Open the app</a>
   </div>
 </nav>
 
