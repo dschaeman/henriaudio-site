@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="theme-color" content="#0C0B0E" />
 <title>Henri Audio &mdash; Writer's Room</title>
+<link rel="canonical" href="https://henriaudio.com/" />
 <meta name="description" content="Writer's Room by Henri Audio &mdash; the songwriting app. Lyrics, voice memos, references, and your co-writers in one place. Your work stays yours." />
 <meta property="og:title" content="Writer's Room &mdash; by Henri Audio" />
 <meta property="og:description" content="Where songs actually get written. Lyrics, voice memos, and co-writers in one place." />
@@ -431,6 +432,43 @@
     d.setAttribute("data-inapp", app);
     d.setAttribute("data-browser", /iPhone|iPad|iPod/.test(ua) ? "Safari" : "your browser");
   })();
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://henriaudio.com/#organization",
+      "name": "Henri Audio",
+      "url": "https://henriaudio.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://henriaudio.com/assets/henri-audio-logo.jpg",
+        "width": 512,
+        "height": 512
+      },
+      "description": "Henri Audio makes Writer's Room, a songwriting app, plus Record Room and the Utility Deck plugin.",
+      "email": "team@henriaudio.com",
+      "brand": [
+        { "@type": "Brand", "name": "Writer's Room" },
+        { "@type": "Brand", "name": "Record Room" },
+        { "@type": "Brand", "name": "Utility Deck" }
+      ],
+      "sameAs": [
+        "https://www.instagram.com/writersroomhq/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://henriaudio.com/#website",
+      "name": "Henri Audio",
+      "alternateName": ["henriaudio.com", "Writer's Room by Henri Audio"],
+      "url": "https://henriaudio.com/",
+      "publisher": { "@id": "https://henriaudio.com/#organization" }
+    }
+  ]
+}
 </script>
 </head>
 <body>
