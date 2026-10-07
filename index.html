@@ -397,6 +397,45 @@
   .closing-invite span { display:block; margin-top:16px; color:var(--faint); font-size:12px; }
   @media(max-width:640px) { .faq-section { margin-top:48px; } .faq-section h2,.closing-invite h2 { font-size:30px; } .demo-chip { font-size:11px; } }
 
+
+  /* ── The computer: the real desktop app (demo mode, Long Drive, full song) on a laptop,
+     drawn in the same graphite as the hero phone. Sizes scale with the laptop (cqw). ── */
+  .computer { margin:76px 0 72px; scroll-margin-top:90px; }
+  .computer-head { max-width:640px; margin:0 auto 46px; text-align:center; }
+  .computer-head h2 { font-family:var(--lyric); font-weight:400; font-size:46px; line-height:1.15; letter-spacing:-1.3px; margin:16px 0 18px; text-wrap:balance; }
+  .computer-head h2 em { color:var(--gold-bright); }
+  .computer-head p { color:var(--dim); font-size:17px; margin:0 auto; max-width:590px; text-wrap:pretty; }
+  .laptop { position:relative; width:min(100%,940px); margin:0 auto; container-type:inline-size; isolation:isolate; }
+  .laptop::before { content:""; position:absolute; z-index:-1; left:50%; top:44%; width:118%; height:120%; transform:translate(-50%,-50%); border-radius:50%; pointer-events:none;
+    background:radial-gradient(ellipse at center,#d4b48324,#d4b4830a 42%,transparent 68%); }
+  .laptop::after { content:""; position:absolute; z-index:-1; left:6%; right:6%; bottom:-1.6cqw; height:2.6cqw; border-radius:50%; background:#000; filter:blur(1.8cqw); opacity:.85; pointer-events:none; }
+  .laptop-lid { position:relative; width:83%; margin:0 auto; padding:1.15% 1.15% 1.5%; border-radius:20px 20px 5px 5px; border-radius:2.3cqw 2.3cqw .5cqw .5cqw; background:#060708;
+    box-shadow:inset 0 0 0 .14cqw #5b5d61,inset 0 0 0 .32cqw #0d0e10,inset 0 .2cqw .2cqw #ffffff22,0 0 0 .08cqw #000; }
+  .laptop-lid::before { content:""; position:absolute; top:.42cqw; left:50%; width:.42cqw; height:.42cqw; margin-left:-.21cqw; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#263c50,#0a131d 45%,#020305 75%); }
+  .laptop-screen { position:relative; overflow:hidden; aspect-ratio:1180/738; border-radius:.45cqw; background:#0c0b0e; }
+  .laptop-screen img { display:block; width:100%; height:100%; object-fit:cover; }
+  .laptop-screen::after { content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(118deg,#ffffff0d 0%,#ffffff05 24%,transparent 42%); }
+  .laptop-base { position:relative; height:15px; height:1.75cqw; border-radius:.25cqw .25cqw 1.6cqw 1.6cqw / .25cqw .25cqw 1.75cqw 1.75cqw;
+    background:linear-gradient(180deg,#9a9ca0 0%,#4a4c50 7%,#25272a 30%,#141517 72%,#08090a 100%);
+    box-shadow:inset .3cqw 0 .3cqw -.2cqw #ffffff30,inset -.3cqw 0 .3cqw -.2cqw #ffffff30; }
+  .laptop-base::before { content:""; position:absolute; top:0; left:50%; width:14%; height:.62cqw; transform:translateX(-50%); border-radius:0 0 .8cqw .8cqw;
+    background:linear-gradient(180deg,#050506,#1b1c1f); box-shadow:inset 0 -.05cqw 0 #ffffff1c; }
+  .computer-note { margin:40px 0 0; text-align:center; color:var(--faint); font-size:14px; }
+  .computer.reveal-ready { opacity:0; transform:translateY(32px); transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1); }
+  .computer.reveal-ready.is-revealed { opacity:1; transform:none; }
+  @media (max-width:880px) {
+    .computer { margin:56px 0 56px; }
+    .computer-head { margin-bottom:32px; }
+    .computer-head h2 { font-size:36px; }
+    .computer-head p { font-size:16px; }
+  }
+  @media (max-width:640px) {
+    .computer-head h2 { font-size:32px; }
+    .laptop { width:calc(100% + 24px); margin-left:-12px; }
+    .computer-note { margin-top:30px; }
+  }
+  @media (prefers-reduced-motion:reduce) { .computer.reveal-ready { opacity:1; transform:none; transition:none; } }
 </style>
 <style>
   /* ── A door back in (Sep 23, 2026) ─────────────────────────────────────────────
@@ -662,6 +701,23 @@
       </div>
     </div>
 
+
+    <section class="computer" id="computer" aria-labelledby="computer-heading">
+      <div class="computer-head">
+        <div class="film-label">On your computer too</div>
+        <h2 id="computer-heading">Room to <em>spread out.</em></h2>
+        <p>Open Writer&rsquo;s Room on your computer and the whole song is in front of you. Lyrics, scratch pad and voice memos, side by side.</p>
+      </div>
+      <figure class="laptop">
+        <div class="laptop-lid">
+          <div class="laptop-screen">
+            <img src="/assets/computer-song-1180.jpg" srcset="/assets/computer-song-1180.jpg 1180w, /assets/computer-song.jpg 2360w" sizes="(max-width:880px) 86vw, 780px" width="1180" height="738" loading="lazy" decoding="async" alt="Writer&rsquo;s Room on a computer: the song Long Drive open in full, with folders of songs in the sidebar and voice memos down the right side" />
+          </div>
+        </div>
+        <div class="laptop-base" aria-hidden="true"></div>
+      </figure>
+      <p class="computer-note">Nothing to install. It runs in your browser and stays in sync with your phone.</p>
+    </section>
     <section class="founder-film" id="launch-story" aria-labelledby="film-heading">
       <div>
         <div class="film-label">The story behind Writer’s Room</div>
@@ -1033,5 +1089,17 @@
   document.querySelectorAll('.feat').forEach((f) => (reduced ? f.classList.add('in') : io.observe(f)));
 </script>
 
+<script>
+  // The computer section rises in like the story card does.
+  (() => {
+    const section = document.querySelector('.computer');
+    if (!section || !('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    section.classList.add('reveal-ready');
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some(entry => entry.isIntersecting)) { section.classList.add('is-revealed'); observer.disconnect(); }
+    }, { threshold: .12 });
+    observer.observe(section);
+  })();
+</script>
 </body>
 </html>
