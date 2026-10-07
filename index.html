@@ -28,13 +28,14 @@
     --lyric:Georgia,"Times New Roman",serif;
   }
   * { box-sizing:border-box; }
-  html,body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family:var(--sans); -webkit-font-smoothing:antialiased; line-height:1.6; overflow-x:hidden; }
+  html,body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family:var(--sans); -webkit-font-smoothing:antialiased; line-height:1.6; overflow-x:hidden; overflow-x:clip; }
+  /* clip, not hidden: "hidden" on body quietly stopped the top bar (and anything else) from pinning. */
   a { color:var(--gold-bright); text-decoration:none; }
   .wrap { max-width:1040px; margin:0 auto; padding:0 24px; }
   svg.i { width:1em; height:1em; stroke:currentColor; stroke-width:2.2; fill:none; stroke-linecap:round; stroke-linejoin:round; display:inline-block; vertical-align:-0.12em; }
 
   /* Nav */
-  nav { position:sticky; top:0; z-index:50; background:rgba(12,11,14,0.88); backdrop-filter:blur(10px); }
+  nav { position:sticky; top:0; z-index:50; background:rgba(12,11,14,0.88); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); }
   .nav-inner { display:flex; align-items:center; justify-content:space-between; height:64px; }
   .brand { display:flex; align-items:center; gap:11px; cursor:pointer; }
   .ha-mark { width:11px; height:11px; background:var(--gold-bright); transform:rotate(45deg); border-radius:2px; flex:none; }
@@ -365,10 +366,8 @@
   .demo-utility { flex:0 0 100%; display:flex; justify-content:center; gap:14px; margin-top:10px; position:relative; z-index:4; }
   .demo-toggle,.replay-ideas { background:none; border-color:transparent; font-size:11px; padding:5px; }
   .phone-wrap::after { bottom:135px; }
-  .founder-film.reveal-ready { opacity:0; transform:translateY(32px); transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1); }
-  .founder-film.reveal-ready.is-revealed { opacity:1; transform:none; }
   @media(max-width:880px) { .idea-card { width:132px; margin-left:-66px; font-size:12px; } .idea-card:nth-of-type(1) { --ix:-75px; } .idea-card:nth-of-type(2) { --ix:75px; } .idea-card:nth-of-type(3) { --ix:-55px; } }
-  @media(prefers-reduced-motion:reduce) { .phone-arrived .idea-card { animation:none; display:none; } .founder-film.reveal-ready { opacity:1; transform:none; transition:none; } .replay-ideas { display:none; } }
+  @media(prefers-reduced-motion:reduce) { .phone-arrived .idea-card { animation:none; display:none; } .replay-ideas { display:none; } }
 
   @media(min-width:881px) {
     .vid-frame { width:264px; }
@@ -407,9 +406,11 @@
   .computer-head p { color:var(--dim); font-size:17px; margin:0 auto; max-width:590px; text-wrap:pretty; }
   .laptop { position:relative; width:min(100%,940px); margin:0 auto; container-type:inline-size; isolation:isolate; }
   .laptop::before { content:""; position:absolute; z-index:-1; left:50%; top:44%; width:118%; height:120%; transform:translate(-50%,-50%); border-radius:50%; pointer-events:none;
-    background:radial-gradient(ellipse at center,#d4b48324,#d4b4830a 42%,transparent 68%); }
-  .laptop::after { content:""; position:absolute; z-index:-1; left:6%; right:6%; bottom:-1.6cqw; height:2.6cqw; border-radius:50%; background:#000; filter:blur(1.8cqw); opacity:.85; pointer-events:none; }
-  .laptop-lid { position:relative; width:83%; margin:0 auto; padding:1.15% 1.15% 1.5%; border-radius:20px 20px 5px 5px; border-radius:2.3cqw 2.3cqw .5cqw .5cqw; background:#060708;
+    background:radial-gradient(ellipse at center,#d4b48324,#d4b4830a 42%,transparent 68%); opacity:var(--glow-o,1); }
+  .laptop::after { content:""; position:absolute; z-index:-1; left:6%; right:6%; bottom:-1.6cqw; height:2.6cqw; border-radius:50%; background:#000; filter:blur(1.8cqw); opacity:var(--rest-o,.85); pointer-events:none; }
+  .laptop-hinge { position:relative; width:83%; margin:0 auto; }
+  /* Padding is the lid's bezel: 1.15% and 1.5% of the whole laptop's width, written as a share of the lid. */
+  .laptop-lid { position:relative; padding:1.3855% 1.3855% 1.8072%; border-radius:20px 20px 5px 5px; border-radius:2.3cqw 2.3cqw .5cqw .5cqw; background:#060708;
     box-shadow:inset 0 0 0 .14cqw #5b5d61,inset 0 0 0 .32cqw #0d0e10,inset 0 .2cqw .2cqw #ffffff22,0 0 0 .08cqw #000; }
   .laptop-lid::before { content:""; position:absolute; top:.42cqw; left:50%; width:.42cqw; height:.42cqw; margin-left:-.21cqw; border-radius:50%;
     background:radial-gradient(circle at 35% 30%,#263c50,#0a131d 45%,#020305 75%); }
@@ -421,9 +422,44 @@
     box-shadow:inset .3cqw 0 .3cqw -.2cqw #ffffff30,inset -.3cqw 0 .3cqw -.2cqw #ffffff30; }
   .laptop-base::before { content:""; position:absolute; top:0; left:50%; width:14%; height:.62cqw; transform:translateX(-50%); border-radius:0 0 .8cqw .8cqw;
     background:linear-gradient(180deg,#050506,#1b1c1f); box-shadow:inset 0 -.05cqw 0 #ffffff1c; }
+  .laptop-dark { position:absolute; inset:0; background:#000; opacity:0; pointer-events:none; }
+  .laptop-back, .laptop-edge, .laptop-deck, .laptop-side, .laptop-floor { display:none; }
   .computer-note { margin:40px 0 0; text-align:center; color:var(--faint); font-size:14px; }
-  .computer.reveal-ready { opacity:0; transform:translateY(32px); transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1); }
-  .computer.reveal-ready.is-revealed { opacity:1; transform:none; }
+
+  /* Scroll mode, switched on by the script at the bottom when the device can draw it in 3D and the
+     visitor hasn't asked for less motion. The laptop holds in the middle of the screen for a stretch
+     of scrolling while it opens its lid and turns to face you. It ends on exactly the still picture
+     above: the camera sits level with the keyboard, so the keyboard shrinks to a line, and the front
+     edge (really 83% wide, closer to the camera) reads at full width. */
+  /* The hold: room after the laptop for it to stay pinned in (inside the box, so sticky can use it). */
+  .computer.is-scrolly .computer-track::after { content:""; display:block; height:58vh; height:58svh; }
+  @media (max-width:640px) { .computer.is-scrolly .computer-track::after { height:46vh; height:46svh; } }
+  .computer.is-scrolly .computer-stage { position:sticky; top:20vh;
+    top:max(76px,calc(32px + 50vh - var(--laptop-h,0px) / 2)); top:max(76px,calc(32px + 50svh - var(--laptop-h,0px) / 2)); }
+  .computer.is-scrolly.no-pin .computer-track::after { display:none; }
+  .computer.is-scrolly.no-pin .computer-stage { position:relative; top:auto; }
+  /* The keyboard deck is as deep as the lid is tall (a closed lid covers it exactly). Camera distance =
+     deck depth / (1 - .83), which makes the 83%-wide front edge read as 100% wide. */
+  .laptop.is-3d { --hinge-y:calc(2.65cqw + 80.7cqw * 738 / 1180); --deck-d:var(--hinge-y); --lid-t:.6cqw; --lip-h:1.4525cqw; }
+  .laptop.is-3d .laptop-scene { perspective:312.5cqw; perspective-origin:50% var(--hinge-y); }
+  .laptop.is-3d .laptop-body { position:relative; transform-style:preserve-3d; transform-origin:50% var(--hinge-y) calc(var(--deck-d) / 2); will-change:transform; }
+  .laptop.is-3d .laptop-hinge { transform-style:preserve-3d; transform-origin:50% 100%; will-change:transform; }
+  .laptop.is-3d .laptop-lid, .laptop.is-3d .laptop-back, .laptop.is-3d .laptop-edge, .laptop.is-3d .laptop-base,
+  .laptop.is-3d .laptop-deck, .laptop.is-3d .laptop-side { -webkit-backface-visibility:hidden; backface-visibility:hidden; }
+  .laptop.is-3d .laptop-back { display:block; position:absolute; inset:0; border-radius:2.3cqw 2.3cqw .5cqw .5cqw; transform:translateZ(calc(-1 * var(--lid-t))) rotateY(180deg);
+    background:linear-gradient(160deg,#4a4c51 0%,#323337 34%,#27282b 100%); box-shadow:inset 0 0 0 .12cqw #5d5f64,inset 0 .25cqw .5cqw #ffffff14; }
+  .laptop.is-3d .laptop-edge { display:block; position:absolute; left:1.4cqw; right:1.4cqw; top:calc(-1 * var(--lid-t)); height:var(--lid-t); transform-origin:50% 100%; transform:rotateX(90deg);
+    background:linear-gradient(90deg,#1c1d20,#55575c 18%,#6a6c70 50%,#55575c 82%,#1c1d20); }
+  .laptop.is-3d .laptop-base { transform-origin:50% 0; transform:translateZ(var(--deck-d)) scale(.83); }
+  .laptop.is-3d .laptop-deck { display:block; position:absolute; left:8.5%; width:83%; top:var(--hinge-y); height:var(--deck-d); transform-origin:50% 0; transform:rotateX(90deg);
+    background:url(/assets/laptop-deck.svg) 0 0 / 100% 100% no-repeat; }
+  .laptop.is-3d .laptop-side { display:block; position:absolute; top:var(--hinge-y); width:var(--deck-d); height:var(--lip-h); border-radius:0 .3cqw .3cqw 0;
+    background:linear-gradient(180deg,#7a7c80 0%,#38393d 22%,#1a1b1d 70%,#0c0d0e 100%); }
+  .laptop.is-3d .laptop-side-l { left:8.5%; transform-origin:0 0; transform:rotateY(-90deg); }
+  .laptop.is-3d .laptop-side-r { left:calc(91.5% - var(--deck-d)); transform-origin:100% 0; transform:rotateY(90deg); border-radius:.3cqw 0 0 .3cqw; }
+  .laptop.is-3d .laptop-floor { display:block; position:absolute; left:-4%; width:108%; top:calc(var(--hinge-y) + var(--lip-h)); height:calc(var(--deck-d) * 1.36); pointer-events:none;
+    transform-origin:50% 0; transform:translateZ(calc(var(--deck-d) * -.18)) rotateX(90deg);
+    background:radial-gradient(closest-side,#000000c0,#00000070 55%,transparent); }
   @media (max-width:880px) {
     .computer { margin:56px 0 56px; }
     .computer-head { margin-bottom:32px; }
@@ -435,7 +471,26 @@
     .laptop { width:calc(100% + 24px); margin-left:-12px; }
     .computer-note { margin-top:30px; }
   }
-  @media (prefers-reduced-motion:reduce) { .computer.reveal-ready { opacity:1; transform:none; transition:none; } }
+
+  /* ── Things rise into place as they scroll in (Oct 7, 2026). The script at the bottom adds these
+     classes only when the visitor hasn't asked for less motion, so without it nothing is hidden. ── */
+  .rv { opacity:0; transform:translate3d(0,34px,0); }
+  .rvw { display:inline-block; opacity:0; transform:translate3d(0,.45em,0); }
+  h2 span.rvw { display:inline-block; margin:0; font-size:inherit; color:inherit; }  /* .closing-invite styles its own spans */
+  .rv-card { opacity:0; transform:translate3d(0,56px,0) scale(.96); }
+  .rv-swoop { opacity:0; transform:perspective(1100px) translate3d(80px,46px,-90px) rotateY(-26deg) rotateZ(4deg); }
+  .on.rv, .on .rv, .on .rvw, .on.rv-card, .on .rv-swoop { opacity:1; transform:none;
+    transition:opacity .9s cubic-bezier(.16,1,.3,1) var(--rv-d,0s), transform 1.3s cubic-bezier(.16,1,.3,1) var(--rv-d,0s); }
+  .waveline.rv-wipe { -webkit-clip-path:inset(0 50% 0 50%); clip-path:inset(0 50% 0 50%); }
+  .waveline.rv-wipe.on { -webkit-clip-path:inset(0); clip-path:inset(0); transition:clip-path 1.8s cubic-bezier(.16,1,.3,1) .1s, -webkit-clip-path 1.8s cubic-bezier(.16,1,.3,1) .1s; }
+  /* The feature cards stand up into place, one after another. */
+  .feat { transform:perspective(900px) translate3d(0,44px,-40px) rotateX(24deg); transform-origin:50% 100%;
+    transition:opacity .8s ease, transform 1.2s cubic-bezier(.16,1,.3,1), box-shadow .25s; }
+  .feat.in { transform:none; }
+  .feat.in:hover { transform:translateY(-4px); transition:transform .3s cubic-bezier(.2,.8,.3,1), box-shadow .25s; }
+  @media (max-width:880px) { .rv-swoop { transform:perspective(1100px) translate3d(0,60px,-60px) rotateX(20deg); } }
+  @media (prefers-reduced-motion:reduce) { .feat { transform:none; transition:none; } }
+  @media print { .rv, .rvw, .rv-card, .rv-swoop { opacity:1 !important; transform:none !important; } .waveline.rv-wipe { -webkit-clip-path:none; clip-path:none; } }
 </style>
 <style>
   /* ── A door back in (Sep 23, 2026) ─────────────────────────────────────────────
@@ -708,15 +763,32 @@
         <h2 id="computer-heading">Room to <em>spread out.</em></h2>
         <p>Open Writer&rsquo;s Room on your computer and the whole song is in front of you. Lyrics, scratch pad and voice memos, side by side.</p>
       </div>
-      <figure class="laptop">
-        <div class="laptop-lid">
-          <div class="laptop-screen">
-            <img src="/assets/computer-song-1180.jpg" srcset="/assets/computer-song-1180.jpg 1180w, /assets/computer-song.jpg 2360w" sizes="(max-width:880px) 86vw, 780px" width="1180" height="738" loading="lazy" decoding="async" alt="Writer&rsquo;s Room on a computer: the song Long Drive open in full, with folders of songs in the sidebar and voice memos down the right side" />
-          </div>
+      <div class="computer-track">
+        <div class="computer-stage">
+          <figure class="laptop">
+            <div class="laptop-scene">
+              <div class="laptop-body">
+                <div class="laptop-hinge">
+                  <div class="laptop-lid">
+                    <div class="laptop-screen">
+                      <img src="/assets/computer-song-1180.jpg" srcset="/assets/computer-song-1180.jpg 1180w, /assets/computer-song.jpg 2360w" sizes="(max-width:880px) 86vw, 780px" width="1180" height="738" loading="lazy" decoding="async" alt="Writer&rsquo;s Room on a computer: the song Long Drive open in full, with folders of songs in the sidebar and voice memos down the right side" />
+                      <div class="laptop-dark"></div>
+                    </div>
+                  </div>
+                  <div class="laptop-back" aria-hidden="true"></div>
+                  <div class="laptop-edge" aria-hidden="true"></div>
+                </div>
+                <div class="laptop-base" aria-hidden="true"></div>
+                <div class="laptop-deck" aria-hidden="true"></div>
+                <div class="laptop-side laptop-side-l" aria-hidden="true"></div>
+                <div class="laptop-side laptop-side-r" aria-hidden="true"></div>
+                <div class="laptop-floor" aria-hidden="true"></div>
+              </div>
+            </div>
+          </figure>
+          <p class="computer-note">Nothing to install. It runs in your browser and stays in sync with your phone.</p>
         </div>
-        <div class="laptop-base" aria-hidden="true"></div>
-      </figure>
-      <p class="computer-note">Nothing to install. It runs in your browser and stays in sync with your phone.</p>
+      </div>
     </section>
     <section class="founder-film" id="launch-story" aria-labelledby="film-heading">
       <div>
@@ -982,14 +1054,6 @@
       if (entries.some(entry => entry.isIntersecting)) { enterPhone(); phoneObserver.disconnect(); }
     }, { threshold: .2 });
     phoneObserver.observe(stage);
-    const founder = document.querySelector('.founder-film');
-    if (!motionPreference.matches) {
-      founder.classList.add('reveal-ready');
-      const revealObserver = new IntersectionObserver((entries) => {
-        if (entries.some(entry => entry.isIntersecting)) { founder.classList.add('is-revealed'); revealObserver.disconnect(); }
-      }, {threshold:.12});
-      revealObserver.observe(founder);
-    }
     document.querySelector('button[data-tab="room"]').addEventListener('click', enterPhone);
     const hero = document.querySelector('.hero-grid');
     const resetPhone = () => {
@@ -1090,15 +1154,142 @@
 </script>
 
 <script>
-  // The computer section rises in like the story card does.
+  // ── Scroll choreography (Oct 7, 2026) ──────────────────────────────────────────────────────
+  // The laptop opens and turns to face you as you scroll: it holds in the middle of the screen
+  // while the lid lifts and the screen wakes, and runs backwards if you scroll back up. The
+  // sections after it rise into place as they arrive. None of it runs when the visitor has asked
+  // for less motion; the page then stays exactly as written above.
   (() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+
+    // Rising text: a group starts once it is a little way onto the screen, and stays put after.
+    const seen = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('on'); seen.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -12% 0px' });
+    const rise = (el, cls, delay) => { if (el) { el.classList.add(cls); el.style.setProperty('--rv-d', delay.toFixed(2) + 's'); } };
+    // A headline rises word by word (its <em> and <br> stay as they are). Returns when the last word starts.
+    const words = (h, delay, step) => {
+      const walk = (node) => [...node.childNodes].forEach((n) => {
+        if (n.nodeType === 1 && n.tagName !== 'BR') return walk(n);
+        if (n.nodeType !== 3) return;
+        const out = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach((w) => {
+          if (!w.trim()) { if (w) out.append(w); return; }
+          const s = document.createElement('span');
+          s.className = 'rvw';
+          s.textContent = w;
+          s.style.setProperty('--rv-d', delay.toFixed(2) + 's');
+          delay += step;
+          out.append(s);
+        });
+        n.replaceWith(out);
+      });
+      if (h) walk(h);
+      return delay;
+    };
+    const group = (root, build) => { if (root) { build(root); seen.observe(root); } };
+
+    group(document.querySelector('.computer-head'), (g) => {
+      rise(g.querySelector('.film-label'), 'rv', 0);
+      rise(g.querySelector('p'), 'rv', words(g.querySelector('h2'), .1, .09) + .05);
+    });
+    group(document.querySelector('.founder-film'), (g) => {
+      const text = g.firstElementChild;
+      rise(g, 'rv-card', 0);
+      rise(text.querySelector('.film-label'), 'rv', .15);
+      let d = words(text.querySelector('h2'), .22, .07);
+      text.querySelectorAll('p, .watch-link').forEach((el) => rise(el, 'rv', d += .08));
+      rise(g.querySelector('.film-player'), 'rv-swoop', .25);
+    });
+    group(document.getElementById('waveline'), (g) => g.classList.add('rv-wipe'));
+    group(document.querySelector('.faq-section'), (g) => {
+      rise(g.querySelector('.film-label'), 'rv', 0);
+      let d = words(g.querySelector('h2'), .08, .07);
+      g.querySelectorAll('details').forEach((el) => rise(el, 'rv', d += .07));
+    });
+    group(document.querySelector('.closing-invite'), (g) => {
+      rise(g, 'rv-card', 0);
+      rise(g.querySelector('.film-label'), 'rv', .15);
+      let d = words(g.querySelector('h2'), .22, .07);
+      [...g.children].filter((el) => !el.matches('.film-label, h2')).forEach((el) => rise(el, 'rv', d += .08));
+    });
+
+    // The laptop. One number follows the scroll, 0 to 1: from the moment the laptop comes up the
+    // screen to the end of its hold in the middle. Everything else is worked out from it.
     const section = document.querySelector('.computer');
-    if (!section || !('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    section.classList.add('reveal-ready');
-    const observer = new IntersectionObserver((entries) => {
-      if (entries.some(entry => entry.isIntersecting)) { section.classList.add('is-revealed'); observer.disconnect(); }
-    }, { threshold: .12 });
-    observer.observe(section);
+    const laptop = section && section.querySelector('.laptop');
+    const can3d = window.CSS && CSS.supports('container-type', 'inline-size') && CSS.supports('transform-style', 'preserve-3d');
+    if (laptop && !can3d) group(section.querySelector('.computer-note'), (g) => rise(g, 'rv', 0));
+    if (!laptop || !can3d) return;
+    const track = section.querySelector('.computer-track');
+    const stage = section.querySelector('.computer-stage');
+    const body = laptop.querySelector('.laptop-body');
+    const hinge = laptop.querySelector('.laptop-hinge');
+    const dark = laptop.querySelector('.laptop-dark');
+    const floor = laptop.querySelector('.laptop-floor');
+    const deck = laptop.querySelector('.laptop-deck');
+    const note = section.querySelector('.computer-note');
+    const nav = document.querySelector('nav');
+    section.classList.add('is-scrolly');
+    laptop.classList.add('is-3d');
+
+    const clamp = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
+    const span = (p, a, b) => clamp((p - a) / (b - a));
+    const inOut = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+    const out = (x) => 1 - Math.pow(1 - x, 3);
+    const mix = (a, b, t) => (a + (b - a) * t).toFixed(3);
+
+    let vh = 0, pinTop = 0, pinRun = 0;
+    const measure = () => {
+      vh = document.documentElement.clientHeight;
+      const navH = nav ? nav.offsetHeight : 64;
+      const h = stage.offsetHeight;
+      // On a screen too short to hold the whole laptop (a phone on its side), it opens as it passes instead.
+      const pinned = h + navH + 48 <= vh;
+      section.classList.toggle('no-pin', !pinned);
+      section.style.setProperty('--laptop-h', h + 'px');
+      pinTop = pinned ? parseFloat(getComputedStyle(stage).top) || navH : navH + 24;
+      pinRun = pinned ? track.offsetHeight - h : 0;
+    };
+    const goal = () => clamp((vh - track.getBoundingClientRect().top) / (vh - pinTop + pinRun));
+
+    let shown = -1;
+    const draw = (p) => {
+      if (Math.abs(p - shown) < 1e-4) return;
+      shown = p;
+      const turn = inOut(span(p, .1, .93));   // swings round and levels out to face you
+      const open = inOut(span(p, .36, .9));   // the lid lifts
+      const wake = out(span(p, .64, .96));    // the screen comes on
+      const rest = span(p, .86, 1);           // settles onto its shadow
+      body.style.transform = `translate3d(0,${mix(-14, 0, turn)}cqw,0) rotateX(${mix(-40, 0, turn)}deg) rotateY(${mix(-40, 0, turn)}deg) scale(${mix(.76, 1, turn)})`;
+      hinge.style.transform = `rotateX(${mix(-90, 0, open)}deg)`;
+      // Shown only once the lid lifts: some browsers sort a closed lid and the keyboard the wrong way round.
+      deck.style.opacity = span(open, .02, .18).toFixed(3);
+      dark.style.opacity = (1 - wake).toFixed(3);
+      floor.style.opacity = (1 - rest).toFixed(3);
+      laptop.style.setProperty('--glow-o', wake.toFixed(3));
+      laptop.style.setProperty('--rest-o', (.85 * rest).toFixed(3));
+      note.style.opacity = wake.toFixed(3);
+      note.style.transform = `translate3d(0,${mix(16, 0, wake)}px,0)`;
+    };
+    // A touch of easing between scroll steps so a mouse wheel's jumps still look smooth.
+    let now = 0, last = 0, frame = 0;
+    const tick = (t) => {
+      frame = 0;
+      const g = goal();
+      now += (g - now) * (1 - Math.exp(-Math.min(64, t - last) / 70));
+      last = t;
+      if (Math.abs(g - now) < 5e-4) now = g;
+      draw(now);
+      if (now !== g) frame = requestAnimationFrame(tick);
+    };
+    const kick = () => { if (!frame) frame = requestAnimationFrame(tick); };
+    const refit = () => { measure(); kick(); };
+    measure();
+    draw(now = goal());
+    addEventListener('scroll', kick, { passive: true });
+    addEventListener('resize', refit);
+    if ('ResizeObserver' in window) new ResizeObserver(refit).observe(stage);
   })();
 </script>
 </body>
