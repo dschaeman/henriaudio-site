@@ -305,6 +305,9 @@
     background:radial-gradient(ellipse at var(--light-x) var(--light-y),#fff 0%,transparent 65%); opacity:.035; }
   .phone-arrived .phone-entrance { animation:phone-swoop 1.65s cubic-bezier(.16,1,.3,1) both; }
   .phone-arrived .phone-float { animation:phone-hover 7s ease-in-out 1.65s infinite; }
+  /* Out of sight until its entrance plays. On a phone it sits below the fold, and it used to show,
+     vanish and then swoop back in as you scrolled down to it. */
+  @media (prefers-reduced-motion:no-preference) { .phone-waiting:not(.phone-arrived) .phone-entrance { opacity:0; } }
   @keyframes phone-swoop {
     0% { opacity:0; transform:translate3d(150px,110px,-260px) rotateX(14deg) rotateY(-32deg) rotateZ(16deg) scale(.78); }
     65% { opacity:1; transform:translate3d(-8px,-12px,0) rotateX(-2deg) rotateY(4deg) rotateZ(-3deg) scale(1.015); }
@@ -427,15 +430,22 @@
   .computer-note { margin:40px 0 0; text-align:center; color:var(--faint); font-size:14px; }
 
   /* Scroll mode, switched on by the script at the bottom when the device can draw it in 3D and the
-     visitor hasn't asked for less motion. The laptop holds in the middle of the screen for a stretch
-     of scrolling while it opens its lid and turns to face you. It ends on exactly the still picture
-     above: the camera sits level with the keyboard, so the keyboard shrinks to a line, and the front
-     edge (really 83% wide, closer to the camera) reads at full width. */
+     visitor hasn't asked for less motion. The headline, the laptop and the line under it hold in the
+     middle of the screen together for a stretch of scrolling, so the words stay up while the laptop
+     opens its lid and turns to face you. It ends on exactly the still picture above: the camera sits
+     level with the keyboard, so the keyboard shrinks to a line, and the front edge (really 83% wide,
+     closer to the camera) reads at full width. */
   /* The hold: room after the laptop for it to stay pinned in (inside the box, so sticky can use it). */
   .computer.is-scrolly .computer-track::after { content:""; display:block; height:58vh; height:58svh; }
   @media (max-width:640px) { .computer.is-scrolly .computer-track::after { height:46vh; height:46svh; } }
   .computer.is-scrolly .computer-stage { position:sticky; top:20vh;
-    top:max(76px,calc(32px + 50vh - var(--laptop-h,0px) / 2)); top:max(76px,calc(32px + 50svh - var(--laptop-h,0px) / 2)); }
+    top:max(76px,calc(32px + 50vh - var(--stage-h,0px) / 2)); top:max(76px,calc(32px + 50svh - var(--stage-h,0px) / 2)); }
+  /* It all has to fit on the screen at once, so on a short screen the laptop gets only the height the
+     words leave it (--laptop-max, from the script). */
+  .computer.is-scrolly .laptop { width:min(100%,940px,var(--laptop-max,9999px)); }
+  @media (max-width:640px) {
+    .computer.is-scrolly .laptop { width:min(100% + 24px,var(--laptop-max,9999px)); margin-left:max(-12px,calc(50% - var(--laptop-max,9999px) / 2)); }
+  }
   .computer.is-scrolly.no-pin .computer-track::after { display:none; }
   .computer.is-scrolly.no-pin .computer-stage { position:relative; top:auto; }
   /* The keyboard deck is as deep as the lid is tall (a closed lid covers it exactly). Camera distance =
@@ -490,7 +500,7 @@
   .feat.in:hover { transform:translateY(-4px); transition:transform .3s cubic-bezier(.2,.8,.3,1), box-shadow .25s; }
   @media (max-width:880px) { .rv-swoop { transform:perspective(1100px) translate3d(0,60px,-60px) rotateX(20deg); } }
   @media (prefers-reduced-motion:reduce) { .feat { transform:none; transition:none; } }
-  @media print { .rv, .rvw, .rv-card, .rv-swoop { opacity:1 !important; transform:none !important; } .waveline.rv-wipe { -webkit-clip-path:none; clip-path:none; } }
+  @media print { .rv, .rvw, .rv-card, .rv-swoop, .phone-entrance { opacity:1 !important; transform:none !important; } .waveline.rv-wipe { -webkit-clip-path:none; clip-path:none; } }
 </style>
 <style>
   /* ── A door back in (Sep 23, 2026) ─────────────────────────────────────────────
@@ -758,13 +768,13 @@
 
 
     <section class="computer" id="computer" aria-labelledby="computer-heading">
-      <div class="computer-head">
-        <div class="film-label">On your computer too</div>
-        <h2 id="computer-heading">Room to <em>spread out.</em></h2>
-        <p>Open Writer&rsquo;s Room on your computer and the whole song is in front of you. Lyrics, scratch pad and voice memos, side by side.</p>
-      </div>
       <div class="computer-track">
         <div class="computer-stage">
+          <div class="computer-head">
+            <div class="film-label">On your computer too</div>
+            <h2 id="computer-heading">Room to <em>spread out.</em></h2>
+            <p>Open Writer&rsquo;s Room on your computer and the whole song is in front of you. Lyrics, scratch pad and voice memos, side by side.</p>
+          </div>
           <figure class="laptop">
             <div class="laptop-scene">
               <div class="laptop-body">
@@ -1050,6 +1060,7 @@
       void entrance.offsetWidth;
       stage.classList.add('phone-arrived');
     };
+    stage.classList.add('phone-waiting');
     const phoneObserver = new IntersectionObserver((entries) => {
       if (entries.some(entry => entry.isIntersecting)) { enterPhone(); phoneObserver.disconnect(); }
     }, { threshold: .2 });
@@ -1239,19 +1250,27 @@
     const out = (x) => 1 - Math.pow(1 - x, 3);
     const mix = (a, b, t) => (a + (b - a) * t).toFixed(3);
 
-    let vh = 0, pinTop = 0, pinRun = 0;
+    let vh = 0, lapY = 0, endTop = 0, pinRun = 0, capW = 0;
     const measure = () => {
       vh = document.documentElement.clientHeight;
       const navH = nav ? nav.offsetHeight : 64;
-      const h = stage.offsetHeight;
-      // On a screen too short to hold the whole laptop (a phone on its side), it opens as it passes instead.
-      const pinned = h + navH + 48 <= vh;
+      // The words above and below the laptop hold with it, so the laptop gets the height they leave,
+      // 20px clear of the top bar and of the bottom edge. On a screen with too little room for that
+      // (a phone on its side) nothing holds, and the laptop opens as it passes instead.
+      const box = laptop.getBoundingClientRect();
+      const room = vh - navH - 40 - (stage.offsetHeight - box.height);
+      const pinned = room * box.width / box.height >= .5 * Math.min(stage.clientWidth, 940);
+      const fit = pinned ? Math.floor(room * box.width / box.height) : 0;
+      if (Math.abs(fit - capW) > 1) { capW = fit; laptop.style.setProperty('--laptop-max', fit ? fit + 'px' : ''); }
       section.classList.toggle('no-pin', !pinned);
-      section.style.setProperty('--laptop-h', h + 'px');
-      pinTop = pinned ? parseFloat(getComputedStyle(stage).top) || navH : navH + 24;
+      const h = stage.offsetHeight;
+      section.style.setProperty('--stage-h', h + (h & 1) + 'px');  // even, so the hold sits on a whole pixel
+      lapY = laptop.offsetTop;
+      endTop = pinned ? (parseFloat(getComputedStyle(stage).top) || navH) + lapY : navH + 24;
       pinRun = pinned ? track.offsetHeight - h : 0;
     };
-    const goal = () => clamp((vh - track.getBoundingClientRect().top) / (vh - pinTop + pinRun));
+    // 0 as the laptop comes up from the bottom of the screen, 1 at the end of the hold.
+    const goal = () => clamp((vh - track.getBoundingClientRect().top - lapY) / (vh - endTop + pinRun));
 
     let shown = -1;
     const draw = (p) => {
