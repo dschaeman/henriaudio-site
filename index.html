@@ -383,6 +383,18 @@
     .demo-utility { margin-top:6px; }
   }
 
+
+  /* Depth: a giant wordmark plane behind the phone, so the hero reads in layers (type, glow, device) instead of one flat sheet. */
+  .depth-word { position:absolute; z-index:-1; left:50%; top:22px; transform:translate3d(-50%,var(--depth-y,0px),0); pointer-events:none; user-select:none;
+    margin:0; font:900 clamp(96px,11.5vw,168px)/.84 var(--sans); letter-spacing:-.055em; text-align:center; white-space:nowrap; text-transform:uppercase;
+    background:linear-gradient(180deg,#d4b483 0%,#b8986a 38%,#7a644500 92%); -webkit-background-clip:text; background-clip:text; color:transparent; opacity:.34; }
+  .depth-word span { display:block; }
+  .depth-word span + span { margin-top:.02em; }
+  .depth-word.dw-w { top:-28px; font-size:600px; line-height:1; letter-spacing:0; opacity:.22;
+    background:linear-gradient(180deg,#e6c995 0%,#b8986a 45%,#7a644500 88%); -webkit-background-clip:text; background-clip:text; }
+  @media (max-width:880px) { .depth-word.dw-w { font-size:min(150vw,560px); top:-20px; } }
+  @media (prefers-reduced-motion:reduce) { .depth-word { transform:translate3d(-50%,0,0); } }
+
   .beta-offer { padding:14px 16px; background:linear-gradient(115deg,#d4b48319,#d4b48308); border:1px solid #d4b48340; border-radius:13px; }
   #beta-form { scroll-margin-top:100px; }
   .demo-controls { max-width:440px; }
@@ -655,6 +667,7 @@
            The hand-coded phone animation below is kept as a rollback: swap the
            display rules on .vid-phone / .phone to switch back. -->
       <div class="phone-wrap" role="region" aria-label="Explore the app">
+        <p class="depth-word dw-w" aria-hidden="true">W</p>
         <div class="vid-frame"><div class="vid-phone"><video id="app-demo" src="/assets/real-app-demo.mp4" poster="/assets/real-app-poster.jpg" autoplay muted loop playsinline preload="metadata"></video></div></div>
         <div class="phone">
           <div class="screen">
@@ -1314,6 +1327,20 @@
     addEventListener('resize', refit);
     if ('ResizeObserver' in window) new ResizeObserver(refit).observe(stage);
   })();
+</script>
+
+<script>
+/* Depth planes drift slower than the page, so the type sits behind the device. */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var words=[].slice.call(document.querySelectorAll('.depth-word')); if(!words.length) return;
+  var tick=false;
+  function run(){ tick=false; var vh=innerHeight;
+    words.forEach(function(w){ var r=w.parentNode.getBoundingClientRect(); var c=(r.top+r.height/2-vh/2)/vh;
+      w.style.setProperty('--depth-y',(c*-60).toFixed(1)+'px'); }); }
+  addEventListener('scroll',function(){ if(!tick){tick=true;requestAnimationFrame(run);} },{passive:true});
+  addEventListener('resize',run); run();
+})();
 </script>
 </body>
 </html>
