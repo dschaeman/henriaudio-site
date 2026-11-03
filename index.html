@@ -92,6 +92,10 @@
   .bs-body { font-size:15px; line-height:1.5; color:var(--dim); margin:0 0 17px; }
   .bs-cta { display:inline-block; background:var(--gold-bright); color:#0C0B0E; border-radius:13px; font-size:15px; font-weight:800; padding:14px 24px; box-shadow:0 4px 22px rgba(212,180,131,0.28); transition:transform .15s, opacity .15s; }
   .bs-cta:hover { opacity:.92; transform:translateY(-1px); }
+  /* Google "preferred sources": a plain link to Google's own page, no Google script on our site */
+  .bs-pref { display:block; margin:16px 0 0; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08); font-size:13.5px; line-height:1.5; color:var(--dim); }
+  .bs-pref a { color:var(--gold-bright); font-weight:700; white-space:nowrap; }
+  .bs-pref a:hover { text-decoration:underline; }
 
   /* ── The phone: the REAL writing room, writing itself ─────────── */
   .phone-wrap { position:relative; z-index:2; display:flex; justify-content:center; }
@@ -948,6 +952,7 @@
           '<div class="bs-head">You’re in.</div>' +
           '<p class="bs-body">No waiting. Create your account with this same email and start writing. It runs right in your browser, on your phone too.</p>' +
           '<a class="bs-cta" href="https://app.henriaudio.com/?email=' + encodeURIComponent(email) + '">Open Writers Only</a>' +
+          '<p class="bs-pref">See us first on Google. <a href="https://www.google.com/preferences/source?q=henriaudio.com" target="_blank" rel="noopener">Add Henri Audio as a preferred source →</a></p>' +
           '<p class="bs-inapp">Tip: tap ••• at the top and open this in ' + (document.documentElement.dataset.browser || 'your browser') + ' first. It runs smoother there.</p>' +
         '</div>';
       document.querySelectorAll('.signin-row').forEach((n) => n.remove());
